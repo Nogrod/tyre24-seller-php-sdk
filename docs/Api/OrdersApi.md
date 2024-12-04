@@ -217,7 +217,7 @@ void (empty response body)
 ## `setOrderStatusByOrderNumberForSeller()`
 
 ```php
-setOrderStatusByOrderNumberForSeller($country, $content_type, $order, $model_status_update)
+setOrderStatusByOrderNumberForSeller($country, $order, $model_status_update)
 ```
 
 Set order status.
@@ -247,12 +247,11 @@ $apiInstance = new Tyre24\Seller\Api\OrdersApi(
     $config
 );
 $country = de; // string | Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned.
-$content_type = 'content_type_example'; // string | The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned.
 $order = PAC12345670121; // string
 $model_status_update = new \Tyre24\Seller\Model\ModelStatusUpdate(); // \Tyre24\Seller\Model\ModelStatusUpdate
 
 try {
-    $apiInstance->setOrderStatusByOrderNumberForSeller($country, $content_type, $order, $model_status_update);
+    $apiInstance->setOrderStatusByOrderNumberForSeller($country, $order, $model_status_update);
 } catch (Exception $e) {
     echo 'Exception when calling OrdersApi->setOrderStatusByOrderNumberForSeller: ', $e->getMessage(), PHP_EOL;
 }
@@ -263,7 +262,6 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **country** | **string**| Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned. | |
-| **content_type** | **string**| The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned. | |
 | **order** | **string**|  | |
 | **model_status_update** | [**\Tyre24\Seller\Model\ModelStatusUpdate**](../Model/ModelStatusUpdate.md)|  | [optional] |
 

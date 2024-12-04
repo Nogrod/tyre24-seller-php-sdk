@@ -1070,7 +1070,6 @@ class OrdersApi
      * Set order status.
      *
      * @param  string $country Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned. (required)
-     * @param  string $content_type The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned. (required)
      * @param  string $order order (required)
      * @param  \Tyre24\Seller\Model\ModelStatusUpdate|null $model_status_update model_status_update (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setOrderStatusByOrderNumberForSeller'] to see the possible values for this operation
@@ -1081,13 +1080,12 @@ class OrdersApi
      */
     public function setOrderStatusByOrderNumberForSeller(
         string $country,
-        string $content_type,
         string $order,
         ?\Tyre24\Seller\Model\ModelStatusUpdate $model_status_update = null,
         string $contentType = self::contentTypes['setOrderStatusByOrderNumberForSeller'][0]
     ): void
     {
-        $this->setOrderStatusByOrderNumberForSellerWithHttpInfo($country, $content_type, $order, $model_status_update, $contentType);
+        $this->setOrderStatusByOrderNumberForSellerWithHttpInfo($country, $order, $model_status_update, $contentType);
     }
 
     /**
@@ -1096,7 +1094,6 @@ class OrdersApi
      * Set order status.
      *
      * @param  string $country Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned. (required)
-     * @param  string $content_type The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned. (required)
      * @param  string $order (required)
      * @param  \Tyre24\Seller\Model\ModelStatusUpdate|null $model_status_update (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setOrderStatusByOrderNumberForSeller'] to see the possible values for this operation
@@ -1107,13 +1104,12 @@ class OrdersApi
      */
     public function setOrderStatusByOrderNumberForSellerWithHttpInfo(
         string $country,
-        string $content_type,
         string $order,
         ?\Tyre24\Seller\Model\ModelStatusUpdate $model_status_update = null,
         string $contentType = self::contentTypes['setOrderStatusByOrderNumberForSeller'][0]
     ): array
     {
-        $request = $this->setOrderStatusByOrderNumberForSellerRequest($country, $content_type, $order, $model_status_update, $contentType);
+        $request = $this->setOrderStatusByOrderNumberForSellerRequest($country, $order, $model_status_update, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1169,7 +1165,6 @@ class OrdersApi
      * Set order status.
      *
      * @param  string $country Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned. (required)
-     * @param  string $content_type The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned. (required)
      * @param  string $order (required)
      * @param  \Tyre24\Seller\Model\ModelStatusUpdate|null $model_status_update (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setOrderStatusByOrderNumberForSeller'] to see the possible values for this operation
@@ -1179,13 +1174,12 @@ class OrdersApi
      */
     public function setOrderStatusByOrderNumberForSellerAsync(
         string $country,
-        string $content_type,
         string $order,
         ?\Tyre24\Seller\Model\ModelStatusUpdate $model_status_update = null,
         string $contentType = self::contentTypes['setOrderStatusByOrderNumberForSeller'][0]
     ): PromiseInterface
     {
-        return $this->setOrderStatusByOrderNumberForSellerAsyncWithHttpInfo($country, $content_type, $order, $model_status_update, $contentType)
+        return $this->setOrderStatusByOrderNumberForSellerAsyncWithHttpInfo($country, $order, $model_status_update, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1199,7 +1193,6 @@ class OrdersApi
      * Set order status.
      *
      * @param  string $country Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned. (required)
-     * @param  string $content_type The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned. (required)
      * @param  string $order (required)
      * @param  \Tyre24\Seller\Model\ModelStatusUpdate|null $model_status_update (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setOrderStatusByOrderNumberForSeller'] to see the possible values for this operation
@@ -1209,14 +1202,13 @@ class OrdersApi
      */
     public function setOrderStatusByOrderNumberForSellerAsyncWithHttpInfo(
         $country,
-        $content_type,
         $order,
         $model_status_update = null,
         string $contentType = self::contentTypes['setOrderStatusByOrderNumberForSeller'][0]
     ): PromiseInterface
     {
         $returnType = '';
-        $request = $this->setOrderStatusByOrderNumberForSellerRequest($country, $content_type, $order, $model_status_update, $contentType);
+        $request = $this->setOrderStatusByOrderNumberForSellerRequest($country, $order, $model_status_update, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1245,7 +1237,6 @@ class OrdersApi
      * Create request for operation 'setOrderStatusByOrderNumberForSeller'
      *
      * @param  string $country Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned. (required)
-     * @param  string $content_type The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned. (required)
      * @param  string $order (required)
      * @param  \Tyre24\Seller\Model\ModelStatusUpdate|null $model_status_update (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['setOrderStatusByOrderNumberForSeller'] to see the possible values for this operation
@@ -1255,7 +1246,6 @@ class OrdersApi
      */
     public function setOrderStatusByOrderNumberForSellerRequest(
         $country,
-        $content_type,
         $order,
         $model_status_update = null,
         string $contentType = self::contentTypes['setOrderStatusByOrderNumberForSeller'][0]
@@ -1266,13 +1256,6 @@ class OrdersApi
         if ($country === null || (is_array($country) && count($country) === 0)) {
             throw new InvalidArgumentException(
                 'Missing the required parameter $country when calling setOrderStatusByOrderNumberForSeller'
-            );
-        }
-
-        // verify the required parameter 'content_type' is set
-        if ($content_type === null || (is_array($content_type) && count($content_type) === 0)) {
-            throw new InvalidArgumentException(
-                'Missing the required parameter $content_type when calling setOrderStatusByOrderNumberForSeller'
             );
         }
 
@@ -1296,10 +1279,6 @@ class OrdersApi
         // header params
         if ($country !== null) {
             $headerParams['country'] = ObjectSerializer::toHeaderValue($country);
-        }
-        // header params
-        if ($content_type !== null) {
-            $headerParams['Content-Type'] = ObjectSerializer::toHeaderValue($content_type);
         }
 
         // path params

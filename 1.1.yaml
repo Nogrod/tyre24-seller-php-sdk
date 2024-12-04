@@ -496,14 +496,6 @@ paths:
                         type: string
                     example: de
                 -
-                    name: Content-Type
-                    in: header
-                    description: 'The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned.'
-                    required: true
-                    explode: false
-                    schema:
-                        type: string
-                -
                     name: order
                     in: path
                     required: true
