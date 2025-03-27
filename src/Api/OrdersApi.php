@@ -1,4 +1,5 @@
 <?php
+
 /**
  * OrdersApi
  * PHP version 8.1
@@ -166,8 +167,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestInvoiceinformation $request_invoiceinformation = null,
         string $contentType = self::contentTypes['changeInvoiceInformationByOrderNumberForSeller'][0]
-    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response
-    {
+    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response {
         $this->changeInvoiceInformationByOrderNumberForSellerWithHttpInfo($country, $order, $request_invoiceinformation, $contentType);
     }
 
@@ -190,8 +190,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestInvoiceinformation $request_invoiceinformation = null,
         string $contentType = self::contentTypes['changeInvoiceInformationByOrderNumberForSeller'][0]
-    ): array
-    {
+    ): array {
         $request = $this->changeInvoiceInformationByOrderNumberForSellerRequest($country, $order, $request_invoiceinformation, $contentType);
 
         try {
@@ -260,8 +259,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestInvoiceinformation $request_invoiceinformation = null,
         string $contentType = self::contentTypes['changeInvoiceInformationByOrderNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->changeInvoiceInformationByOrderNumberForSellerAsyncWithHttpInfo($country, $order, $request_invoiceinformation, $contentType)
             ->then(
                 function ($response) {
@@ -288,8 +286,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestInvoiceinformation $request_invoiceinformation = null,
         string $contentType = self::contentTypes['changeInvoiceInformationByOrderNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '';
         $request = $this->changeInvoiceInformationByOrderNumberForSellerRequest($country, $order, $request_invoiceinformation, $contentType);
 
@@ -332,8 +329,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestInvoiceinformation $request_invoiceinformation = null,
         string $contentType = self::contentTypes['changeInvoiceInformationByOrderNumberForSeller'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'country' is set
         if ($country === null || (is_array($country) && count($country) === 0)) {
@@ -464,8 +460,7 @@ class OrdersApi
         string $position,
         ?\Tyre24\Seller\Model\ModelStatusUpdate $model_status_update = null,
         string $contentType = self::contentTypes['changeOrderPositionStatusForSeller'][0]
-    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response
-    {
+    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response {
         $this->changeOrderPositionStatusForSellerWithHttpInfo($country, $order, $position, $model_status_update, $contentType);
     }
 
@@ -490,8 +485,7 @@ class OrdersApi
         string $position,
         ?\Tyre24\Seller\Model\ModelStatusUpdate $model_status_update = null,
         string $contentType = self::contentTypes['changeOrderPositionStatusForSeller'][0]
-    ): array
-    {
+    ): array {
         $request = $this->changeOrderPositionStatusForSellerRequest($country, $order, $position, $model_status_update, $contentType);
 
         try {
@@ -554,8 +548,7 @@ class OrdersApi
         string $position,
         ?\Tyre24\Seller\Model\ModelStatusUpdate $model_status_update = null,
         string $contentType = self::contentTypes['changeOrderPositionStatusForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->changeOrderPositionStatusForSellerAsyncWithHttpInfo($country, $order, $position, $model_status_update, $contentType)
             ->then(
                 function ($response) {
@@ -584,8 +577,7 @@ class OrdersApi
         string $position,
         ?\Tyre24\Seller\Model\ModelStatusUpdate $model_status_update = null,
         string $contentType = self::contentTypes['changeOrderPositionStatusForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '';
         $request = $this->changeOrderPositionStatusForSellerRequest($country, $order, $position, $model_status_update, $contentType);
 
@@ -630,8 +622,7 @@ class OrdersApi
         string $position,
         ?\Tyre24\Seller\Model\ModelStatusUpdate $model_status_update = null,
         string $contentType = self::contentTypes['changeOrderPositionStatusForSeller'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'country' is set
         if ($country === null || (is_array($country) && count($country) === 0)) {
@@ -768,8 +759,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestOrderRelation $request_order_relation = null,
         string $contentType = self::contentTypes['linkTwoExistingOrdersForSeller'][0]
-    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response
-    {
+    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response {
         $this->linkTwoExistingOrdersForSellerWithHttpInfo($country, $content_type, $order, $request_order_relation, $contentType);
     }
 
@@ -794,8 +784,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestOrderRelation $request_order_relation = null,
         string $contentType = self::contentTypes['linkTwoExistingOrdersForSeller'][0]
-    ): array
-    {
+    ): array {
         $request = $this->linkTwoExistingOrdersForSellerRequest($country, $content_type, $order, $request_order_relation, $contentType);
 
         try {
@@ -866,8 +855,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestOrderRelation $request_order_relation = null,
         string $contentType = self::contentTypes['linkTwoExistingOrdersForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->linkTwoExistingOrdersForSellerAsyncWithHttpInfo($country, $content_type, $order, $request_order_relation, $contentType)
             ->then(
                 function ($response) {
@@ -896,8 +884,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestOrderRelation $request_order_relation = null,
         string $contentType = self::contentTypes['linkTwoExistingOrdersForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '';
         $request = $this->linkTwoExistingOrdersForSellerRequest($country, $content_type, $order, $request_order_relation, $contentType);
 
@@ -942,8 +929,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestOrderRelation $request_order_relation = null,
         string $contentType = self::contentTypes['linkTwoExistingOrdersForSeller'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'country' is set
         if ($country === null || (is_array($country) && count($country) === 0)) {
@@ -1083,8 +1069,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\ModelStatusUpdate $model_status_update = null,
         string $contentType = self::contentTypes['setOrderStatusByOrderNumberForSeller'][0]
-    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response
-    {
+    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response {
         $this->setOrderStatusByOrderNumberForSellerWithHttpInfo($country, $order, $model_status_update, $contentType);
     }
 
@@ -1107,8 +1092,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\ModelStatusUpdate $model_status_update = null,
         string $contentType = self::contentTypes['setOrderStatusByOrderNumberForSeller'][0]
-    ): array
-    {
+    ): array {
         $request = $this->setOrderStatusByOrderNumberForSellerRequest($country, $order, $model_status_update, $contentType);
 
         try {
@@ -1177,8 +1161,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\ModelStatusUpdate $model_status_update = null,
         string $contentType = self::contentTypes['setOrderStatusByOrderNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->setOrderStatusByOrderNumberForSellerAsyncWithHttpInfo($country, $order, $model_status_update, $contentType)
             ->then(
                 function ($response) {
@@ -1205,8 +1188,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\ModelStatusUpdate $model_status_update = null,
         string $contentType = self::contentTypes['setOrderStatusByOrderNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '';
         $request = $this->setOrderStatusByOrderNumberForSellerRequest($country, $order, $model_status_update, $contentType);
 
@@ -1249,8 +1231,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\ModelStatusUpdate $model_status_update = null,
         string $contentType = self::contentTypes['setOrderStatusByOrderNumberForSeller'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'country' is set
         if ($country === null || (is_array($country) && count($country) === 0)) {
@@ -1379,8 +1360,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestTrackingInformation $request_tracking_information = null,
         string $contentType = self::contentTypes['setTrackingCompanyAndParcelNumberForSeller'][0]
-    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response
-    {
+    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response {
         $this->setTrackingCompanyAndParcelNumberForSellerWithHttpInfo($country, $order, $request_tracking_information, $contentType);
     }
 
@@ -1403,8 +1383,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestTrackingInformation $request_tracking_information = null,
         string $contentType = self::contentTypes['setTrackingCompanyAndParcelNumberForSeller'][0]
-    ): array
-    {
+    ): array {
         $request = $this->setTrackingCompanyAndParcelNumberForSellerRequest($country, $order, $request_tracking_information, $contentType);
 
         try {
@@ -1473,8 +1452,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestTrackingInformation $request_tracking_information = null,
         string $contentType = self::contentTypes['setTrackingCompanyAndParcelNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->setTrackingCompanyAndParcelNumberForSellerAsyncWithHttpInfo($country, $order, $request_tracking_information, $contentType)
             ->then(
                 function ($response) {
@@ -1501,8 +1479,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestTrackingInformation $request_tracking_information = null,
         string $contentType = self::contentTypes['setTrackingCompanyAndParcelNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '';
         $request = $this->setTrackingCompanyAndParcelNumberForSellerRequest($country, $order, $request_tracking_information, $contentType);
 
@@ -1545,8 +1522,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestTrackingInformation $request_tracking_information = null,
         string $contentType = self::contentTypes['setTrackingCompanyAndParcelNumberForSeller'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'country' is set
         if ($country === null || (is_array($country) && count($country) === 0)) {
@@ -1675,8 +1651,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\ModelPaymentStatusUpdate $model_payment_status_update = null,
         string $contentType = self::contentTypes['updatePaymentStatusByOrderNumberForSeller'][0]
-    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response
-    {
+    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response {
         $this->updatePaymentStatusByOrderNumberForSellerWithHttpInfo($country, $order, $model_payment_status_update, $contentType);
     }
 
@@ -1699,8 +1674,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\ModelPaymentStatusUpdate $model_payment_status_update = null,
         string $contentType = self::contentTypes['updatePaymentStatusByOrderNumberForSeller'][0]
-    ): array
-    {
+    ): array {
         $request = $this->updatePaymentStatusByOrderNumberForSellerRequest($country, $order, $model_payment_status_update, $contentType);
 
         try {
@@ -1769,8 +1743,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\ModelPaymentStatusUpdate $model_payment_status_update = null,
         string $contentType = self::contentTypes['updatePaymentStatusByOrderNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->updatePaymentStatusByOrderNumberForSellerAsyncWithHttpInfo($country, $order, $model_payment_status_update, $contentType)
             ->then(
                 function ($response) {
@@ -1797,8 +1770,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\ModelPaymentStatusUpdate $model_payment_status_update = null,
         string $contentType = self::contentTypes['updatePaymentStatusByOrderNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '';
         $request = $this->updatePaymentStatusByOrderNumberForSellerRequest($country, $order, $model_payment_status_update, $contentType);
 
@@ -1841,8 +1813,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\ModelPaymentStatusUpdate $model_payment_status_update = null,
         string $contentType = self::contentTypes['updatePaymentStatusByOrderNumberForSeller'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'country' is set
         if ($country === null || (is_array($country) && count($country) === 0)) {
@@ -1973,8 +1944,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestPdf $request_pdf = null,
         string $contentType = self::contentTypes['uploadDeliveryNotePdfByOrderNumberForSeller'][0]
-    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response
-    {
+    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response {
         $this->uploadDeliveryNotePdfByOrderNumberForSellerWithHttpInfo($country, $content_type, $order, $request_pdf, $contentType);
     }
 
@@ -1999,8 +1969,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestPdf $request_pdf = null,
         string $contentType = self::contentTypes['uploadDeliveryNotePdfByOrderNumberForSeller'][0]
-    ): array
-    {
+    ): array {
         $request = $this->uploadDeliveryNotePdfByOrderNumberForSellerRequest($country, $content_type, $order, $request_pdf, $contentType);
 
         try {
@@ -2071,8 +2040,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestPdf $request_pdf = null,
         string $contentType = self::contentTypes['uploadDeliveryNotePdfByOrderNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->uploadDeliveryNotePdfByOrderNumberForSellerAsyncWithHttpInfo($country, $content_type, $order, $request_pdf, $contentType)
             ->then(
                 function ($response) {
@@ -2101,8 +2069,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestPdf $request_pdf = null,
         string $contentType = self::contentTypes['uploadDeliveryNotePdfByOrderNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '';
         $request = $this->uploadDeliveryNotePdfByOrderNumberForSellerRequest($country, $content_type, $order, $request_pdf, $contentType);
 
@@ -2147,8 +2114,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestPdf $request_pdf = null,
         string $contentType = self::contentTypes['uploadDeliveryNotePdfByOrderNumberForSeller'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'country' is set
         if ($country === null || (is_array($country) && count($country) === 0)) {
@@ -2290,8 +2256,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestPdf $request_pdf = null,
         string $contentType = self::contentTypes['uploadInvoicePdfByOrderNumberForSeller'][0]
-    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response
-    {
+    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response {
         $this->uploadInvoicePdfByOrderNumberForSellerWithHttpInfo($country, $content_type, $order, $request_pdf, $contentType);
     }
 
@@ -2316,8 +2281,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestPdf $request_pdf = null,
         string $contentType = self::contentTypes['uploadInvoicePdfByOrderNumberForSeller'][0]
-    ): array
-    {
+    ): array {
         $request = $this->uploadInvoicePdfByOrderNumberForSellerRequest($country, $content_type, $order, $request_pdf, $contentType);
 
         try {
@@ -2388,8 +2352,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestPdf $request_pdf = null,
         string $contentType = self::contentTypes['uploadInvoicePdfByOrderNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->uploadInvoicePdfByOrderNumberForSellerAsyncWithHttpInfo($country, $content_type, $order, $request_pdf, $contentType)
             ->then(
                 function ($response) {
@@ -2418,8 +2381,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestPdf $request_pdf = null,
         string $contentType = self::contentTypes['uploadInvoicePdfByOrderNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '';
         $request = $this->uploadInvoicePdfByOrderNumberForSellerRequest($country, $content_type, $order, $request_pdf, $contentType);
 
@@ -2464,8 +2426,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestPdf $request_pdf = null,
         string $contentType = self::contentTypes['uploadInvoicePdfByOrderNumberForSeller'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'country' is set
         if ($country === null || (is_array($country) && count($country) === 0)) {
@@ -2607,8 +2568,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestPdf $request_pdf = null,
         string $contentType = self::contentTypes['uploadRefundPdfByOrderNumberForSeller'][0]
-    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response
-    {
+    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response {
         $this->uploadRefundPdfByOrderNumberForSellerWithHttpInfo($country, $content_type, $order, $request_pdf, $contentType);
     }
 
@@ -2633,8 +2593,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestPdf $request_pdf = null,
         string $contentType = self::contentTypes['uploadRefundPdfByOrderNumberForSeller'][0]
-    ): array
-    {
+    ): array {
         $request = $this->uploadRefundPdfByOrderNumberForSellerRequest($country, $content_type, $order, $request_pdf, $contentType);
 
         try {
@@ -2705,8 +2664,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestPdf $request_pdf = null,
         string $contentType = self::contentTypes['uploadRefundPdfByOrderNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->uploadRefundPdfByOrderNumberForSellerAsyncWithHttpInfo($country, $content_type, $order, $request_pdf, $contentType)
             ->then(
                 function ($response) {
@@ -2735,8 +2693,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestPdf $request_pdf = null,
         string $contentType = self::contentTypes['uploadRefundPdfByOrderNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '';
         $request = $this->uploadRefundPdfByOrderNumberForSellerRequest($country, $content_type, $order, $request_pdf, $contentType);
 
@@ -2781,8 +2738,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestPdf $request_pdf = null,
         string $contentType = self::contentTypes['uploadRefundPdfByOrderNumberForSeller'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'country' is set
         if ($country === null || (is_array($country) && count($country) === 0)) {

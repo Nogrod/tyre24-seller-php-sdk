@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ArticlesApi
  * PHP version 8.1
@@ -158,8 +159,7 @@ class ArticlesApi
         ?string $ean = null,
         ?string $oen = null,
         string $contentType = self::contentTypes['deleteAvailableStockByArticleNumberForSeller'][0]
-    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response
-    {
+    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response {
         $this->deleteAvailableStockByArticleNumberForSellerWithHttpInfo($country, $article_type, $article_id, $customer_article_id, $manufacturer_number, $manufacturer_name, $brand_id, $ean, $oen, $contentType);
     }
 
@@ -195,8 +195,7 @@ class ArticlesApi
         ?string $ean = null,
         ?string $oen = null,
         string $contentType = self::contentTypes['deleteAvailableStockByArticleNumberForSeller'][0]
-    ): array
-    {
+    ): array {
         $request = $this->deleteAvailableStockByArticleNumberForSellerRequest($country, $article_type, $article_id, $customer_article_id, $manufacturer_number, $manufacturer_name, $brand_id, $ean, $oen, $contentType);
 
         try {
@@ -294,8 +293,7 @@ class ArticlesApi
         ?string $ean = null,
         ?string $oen = null,
         string $contentType = self::contentTypes['deleteAvailableStockByArticleNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->deleteAvailableStockByArticleNumberForSellerAsyncWithHttpInfo($country, $article_type, $article_id, $customer_article_id, $manufacturer_number, $manufacturer_name, $brand_id, $ean, $oen, $contentType)
             ->then(
                 function ($response) {
@@ -335,8 +333,7 @@ class ArticlesApi
         ?string $ean = null,
         ?string $oen = null,
         string $contentType = self::contentTypes['deleteAvailableStockByArticleNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '';
         $request = $this->deleteAvailableStockByArticleNumberForSellerRequest($country, $article_type, $article_id, $customer_article_id, $manufacturer_number, $manufacturer_name, $brand_id, $ean, $oen, $contentType);
 
@@ -392,8 +389,7 @@ class ArticlesApi
         ?string $ean = null,
         ?string $oen = null,
         string $contentType = self::contentTypes['deleteAvailableStockByArticleNumberForSeller'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'country' is set
         if ($country === null || (is_array($country) && count($country) === 0)) {
@@ -584,8 +580,7 @@ class ArticlesApi
         string $country,
         ?\Tyre24\Seller\Model\RequestStockUpdate $request_stock_update = null,
         string $contentType = self::contentTypes['updateAvailableStockByArticleNumberForSeller'][0]
-    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response
-    {
+    ): \Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller400Response|\Tyre24\Seller\Model\DeleteAvailableStockByArticleNumberForSeller403Response {
         $this->updateAvailableStockByArticleNumberForSellerWithHttpInfo($country, $request_stock_update, $contentType);
     }
 
@@ -607,8 +602,7 @@ class ArticlesApi
         string $country,
         ?\Tyre24\Seller\Model\RequestStockUpdate $request_stock_update = null,
         string $contentType = self::contentTypes['updateAvailableStockByArticleNumberForSeller'][0]
-    ): array
-    {
+    ): array {
         $request = $this->updateAvailableStockByArticleNumberForSellerRequest($country, $request_stock_update, $contentType);
 
         try {
@@ -692,8 +686,7 @@ class ArticlesApi
         string $country,
         ?\Tyre24\Seller\Model\RequestStockUpdate $request_stock_update = null,
         string $contentType = self::contentTypes['updateAvailableStockByArticleNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->updateAvailableStockByArticleNumberForSellerAsyncWithHttpInfo($country, $request_stock_update, $contentType)
             ->then(
                 function ($response) {
@@ -719,8 +712,7 @@ class ArticlesApi
         string $country,
         ?\Tyre24\Seller\Model\RequestStockUpdate $request_stock_update = null,
         string $contentType = self::contentTypes['updateAvailableStockByArticleNumberForSeller'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '';
         $request = $this->updateAvailableStockByArticleNumberForSellerRequest($country, $request_stock_update, $contentType);
 
@@ -762,8 +754,7 @@ class ArticlesApi
         string $country,
         ?\Tyre24\Seller\Model\RequestStockUpdate $request_stock_update = null,
         string $contentType = self::contentTypes['updateAvailableStockByArticleNumberForSeller'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'country' is set
         if ($country === null || (is_array($country) && count($country) === 0)) {

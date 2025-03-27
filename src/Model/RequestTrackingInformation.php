@@ -1,4 +1,5 @@
 <?php
+
 /**
  * RequestTrackingInformation
  *
@@ -418,7 +419,7 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
     #[ReturnTypeWillChange]
     public function jsonSerialize(): mixed
     {
-       return ObjectSerializer::sanitizeForSerialization($this);
+        return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DeleteAvailableStockByArticleNumberForSeller400Response
  *
@@ -378,7 +379,7 @@ class DeleteAvailableStockByArticleNumberForSeller400Response implements ModelIn
     #[ReturnTypeWillChange]
     public function jsonSerialize(): mixed
     {
-       return ObjectSerializer::sanitizeForSerialization($this);
+        return ObjectSerializer::sanitizeForSerialization($this);
     }
 
     /**

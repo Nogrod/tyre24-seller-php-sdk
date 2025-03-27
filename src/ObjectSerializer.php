@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ObjectSerializer
  *
@@ -99,7 +100,7 @@ class ObjectSerializer
                             if (is_scalar($value)) {
                                 $value = $openAPIType::tryFrom($value);
                                 if ($value === null) {
-                                    $imploded = implode("', '", array_map(fn($case) => $case->value, $openAPIType::cases()));
+                                    $imploded = implode("', '", array_map(fn ($case) => $case->value, $openAPIType::cases()));
                                     throw new \InvalidArgumentException(
                                         sprintf(
                                             "Invalid value for enum '%s', must be one of: '%s'",
@@ -116,7 +117,7 @@ class ObjectSerializer
                     }
                 }
             } else {
-                foreach($data as $property => $value) {
+                foreach ($data as $property => $value) {
                     $values[$property] = self::sanitizeForSerialization($value);
                 }
             }
@@ -193,7 +194,7 @@ class ObjectSerializer
             # This comparison is safe for floating point values, since the previous call to empty() will
             # filter out values that don't match 0.
             'int','integer' => $value !== 0,
-            'number'|'float' => $value !== 0 && $value !== 0.0,
+            'number' | 'float' => $value !== 0 && $value !== 0.0,
 
             # For boolean values, '' is considered empty
             'bool','boolean' => !in_array($value, [false, 0], true),
@@ -241,7 +242,7 @@ class ObjectSerializer
         }
 
         # Handle DateTime objects in query
-        if($openApiType === "\DateTime" && $value instanceof DateTime) {
+        if ($openApiType === "\DateTime" && $value instanceof DateTime) {
             return ["{$paramName}" => $value->format(self::$dateTimeFormat)];
         }
 
@@ -251,7 +252,9 @@ class ObjectSerializer
         // since \GuzzleHttp\Psr7\Query::build fails with nested arrays
         // need to flatten array first
         $flattenArray = function ($arr, $name, &$result = []) use (&$flattenArray, $style, $explode) {
-            if (!is_array($arr)) return $arr;
+            if (!is_array($arr)) {
+                return $arr;
+            }
 
             foreach ($arr as $k => $v) {
                 $prop = ($style === 'deepObject') ? "{$name}[{$k}]" : $k;
@@ -299,7 +302,7 @@ class ObjectSerializer
      */
     public static function convertBoolToQueryStringFormat(bool $value): int|string
     {
-        if (Configuration::BOOLEAN_FORMAT_STRING == Configuration::getDefaultConfiguration()->getBooleanFormatForQueryString()) {
+        if (Configuration::BOOLEAN_FORMAT_STRING === Configuration::getDefaultConfiguration()->getBooleanFormatForQueryString()) {
             return $value ? 'true' : 'false';
         }
 
@@ -504,7 +507,7 @@ class ObjectSerializer
         if (is_subclass_of($class, '\BackedEnum')) {
             $data = $class::tryFrom($data);
             if ($data === null) {
-                $imploded = implode("', '", array_map(fn($case) => $case->value, $class::cases()));
+                $imploded = implode("', '", array_map(fn ($case) => $case->value, $class::cases()));
                 throw new \InvalidArgumentException("Invalid value for enum '$class', must be one of: '$imploded'");
             }
             return $data;
@@ -580,9 +583,9 @@ class ObjectSerializer
             throw new \InvalidArgumentException('Invalid type');
         }
 
-        $castBool = Configuration::BOOLEAN_FORMAT_INT == Configuration::getDefaultConfiguration()->getBooleanFormatForQueryString()
+        $castBool = Configuration::BOOLEAN_FORMAT_INT === Configuration::getDefaultConfiguration()->getBooleanFormatForQueryString()
             ? function ($v) { return (int) $v; }
-            : function ($v) { return $v ? 'true' : 'false'; };
+        : function ($v) { return $v ? 'true' : 'false'; };
 
         $qs = '';
         foreach ($params as $k => $v) {
