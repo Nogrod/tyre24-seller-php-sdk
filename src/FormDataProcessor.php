@@ -1,9 +1,10 @@
 <?php
 
 /**
- * HeaderSelector
+ * FormDataProcessor
  * PHP version 8.1
  *
+ * @category Class
  * @package  Tyre24\Seller
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
@@ -28,217 +29,210 @@
 
 namespace Tyre24\Seller;
 
-/**
- * HeaderSelector Class Doc Comment
- *
- * @package  Tyre24\Seller
- * @author   OpenAPI Generator team
- * @link     https://openapi-generator.tech
- */
-class HeaderSelector
+use ArrayAccess;
+use DateTime;
+use GuzzleHttp\Psr7\Utils;
+use Psr\Http\Message\StreamInterface;
+use SplFileObject;
+use Tyre24\Seller\Model\ModelInterface;
+
+class FormDataProcessor
 {
     /**
-     * @param string[] $accept
-     * @param string   $contentType
-     * @param bool     $isMultipart
-     * @return string[]
+     * Tags whether payload passed to ::prepare() contains one or more
+     * SplFileObject or stream values.
      */
-    public function selectHeaders(array $accept, string $contentType, bool $isMultipart): array
+    public bool $has_file = false;
+
+    /**
+     * Take value and turn it into an array suitable for inclusion in
+     * the http body (form parameter). If it's a string, pass through unchanged
+     * If it's a datetime object, format it in ISO8601
+     *
+     * @param array<string|bool|array|DateTime|ArrayAccess|SplFileObject> $values the value of the form parameter
+     *
+     * @return array [key => value] of formdata
+     */
+    public function prepare(array $values): array
     {
-        $headers = [];
+        $this->has_file = false;
+        $result = [];
 
-        $accept = $this->selectAcceptHeader($accept);
-        if ($accept !== null) {
-            $headers['Accept'] = $accept;
-        }
-
-        if (!$isMultipart) {
-            if ($contentType === '') {
-                $contentType = 'application/json';
+        foreach ($values as $k => $v) {
+            if ($v === null) {
+                continue;
             }
 
-            $headers['Content-Type'] = $contentType;
+            $result[$k] = $this->makeFormSafe($v);
         }
 
-        return $headers;
+        return $result;
     }
 
     /**
-     * Return the header 'Accept' based on an array of Accept provided.
+     * Flattens a multi-level array of data and generates a single-level array
+     * compatible with formdata - a single-level array where the keys use bracket
+     * notation to signify nested data.
      *
-     * @param string[] $accept Array of header
-     *
-     * @return null|string Accept (e.g. application/json)
+     * credit: https://github.com/FranBar1966/FlatPHP
      */
-    private function selectAcceptHeader(array $accept): ?string
+    public static function flatten(array $source, string $start = ''): array
     {
-        # filter out empty entries
-        $accept = array_filter($accept);
-
-        if (count($accept) === 0) {
-            return null;
-        }
-
-        # If there's only one Accept header, just use it
-        if (count($accept) === 1) {
-            return reset($accept);
-        }
-
-        # If none of the available Accept headers is of type "json", then just use all them
-        $headersWithJson = preg_grep('~(?i)^(application/json|[^;/ \t]+/[^;/ \t]+[+]json)[ \t]*(;.*)?$~', $accept);
-        if (count($headersWithJson) === 0) {
-            return implode(',', $accept);
-        }
-
-        # If we got here, then we need add quality values (weight), as described in IETF RFC 9110, Items 12.4.2/12.5.1,
-        # to give the highest priority to json-like headers - recalculating the existing ones, if needed
-        return $this->getAcceptHeaderWithAdjustedWeight($accept, $headersWithJson);
-    }
-
-    /**
-    * Create an Accept header string from the given "Accept" headers array, recalculating all weights
-    *
-    * @param string[] $accept            Array of Accept Headers
-    * @param string[] $headersWithJson   Array of Accept Headers of type "json"
-    *
-    * @return string "Accept" Header (e.g. "application/json, text/html; q=0.9")
-    */
-    private function getAcceptHeaderWithAdjustedWeight(array $accept, array $headersWithJson): string
-    {
-        $processedHeaders = [
-            'withApplicationJson' => [],
-            'withJson' => [],
-            'withoutJson' => [],
+        $opt = [
+            'prefix'          => '[',
+            'suffix'          => ']',
+            'suffix-end'      => true,
+            'prefix-list'     => '[',
+            'suffix-list'     => ']',
+            'suffix-list-end' => true,
         ];
 
-        foreach ($accept as $header) {
-
-            $headerData = $this->getHeaderAndWeight($header);
-
-            if (stripos($headerData['header'], 'application/json') === 0) {
-                $processedHeaders['withApplicationJson'][] = $headerData;
-            } elseif (in_array($header, $headersWithJson, true)) {
-                $processedHeaders['withJson'][] = $headerData;
-            } else {
-                $processedHeaders['withoutJson'][] = $headerData;
-            }
-        }
-
-        $acceptHeaders = [];
-        $currentWeight = 1000;
-
-        $hasMoreThan28Headers = count($accept) > 28;
-
-        foreach ($processedHeaders as $headers) {
-            if (count($headers) > 0) {
-                $acceptHeaders[] = $this->adjustWeight($headers, $currentWeight, $hasMoreThan28Headers);
-            }
-        }
-
-        $acceptHeaders = array_merge(...$acceptHeaders);
-
-        return implode(',', $acceptHeaders);
-    }
-
-    /**
-     * Given an Accept header, returns an associative array splitting the header and its weight
-     *
-     * @param string $header "Accept" Header
-     *
-     * @return array with the header and its weight
-     */
-    private function getHeaderAndWeight(string $header): array
-    {
-        # matches headers with weight, splitting the header and the weight in $outputArray
-        if (preg_match('/(.*);\s*q=(1(?:\.0+)?|0\.\d+)$/', $header, $outputArray) === 1) {
-            $headerData = [
-                'header' => $outputArray[1],
-                'weight' => (int)($outputArray[2] * 1000),
-            ];
+        if ($start === '') {
+            $currentPrefix = '';
+            $currentSuffix = '';
+            $currentSuffixEnd = false;
+        } elseif (array_is_list($source)) {
+            $currentPrefix = $opt['prefix-list'];
+            $currentSuffix = $opt['suffix-list'];
+            $currentSuffixEnd = $opt['suffix-list-end'];
         } else {
-            $headerData = [
-                'header' => trim($header),
-                'weight' => 1000,
-            ];
+            $currentPrefix = $opt['prefix'];
+            $currentSuffix = $opt['suffix'];
+            $currentSuffixEnd = $opt['suffix-end'];
         }
 
-        return $headerData;
-    }
+        $currentName = $start;
+        $result = [];
 
-    /**
-     * @param array[] $headers
-     * @param float   $currentWeight
-     * @param bool    $hasMoreThan28Headers
-     * @return string[] array of adjusted "Accept" headers
-     */
-    private function adjustWeight(array $headers, float &$currentWeight, bool $hasMoreThan28Headers): array
-    {
-        usort($headers, function (array $a, array $b) {
-            return $b['weight'] - $a['weight'];
-        });
+        foreach ($source as $key => $val) {
+            $currentName .= $currentPrefix . $key;
 
-        $acceptHeaders = [];
-        foreach ($headers as $index => $header) {
-            if ($index > 0 && $headers[$index - 1]['weight'] > $header['weight']) {
-                $currentWeight = $this->getNextWeight($currentWeight, $hasMoreThan28Headers);
+            if (is_array($val) && !empty($val)) {
+                $currentName .= $currentSuffix;
+                $result += self::flatten($val, $currentName);
+            } else {
+                if ($currentSuffixEnd) {
+                    $currentName .= $currentSuffix;
+                }
+
+                $result[$currentName] = ObjectSerializer::toString($val);
             }
 
-            $weight = $currentWeight;
-
-            $acceptHeaders[] = $this->buildAcceptHeader($header['header'], $weight);
+            $currentName = $start;
         }
 
-        $currentWeight = $this->getNextWeight($currentWeight, $hasMoreThan28Headers);
-
-        return $acceptHeaders;
+        return $result;
     }
 
     /**
-     * @param string $header
-     * @param int    $weight
-     * @return string
+     * formdata must be limited to scalars or arrays of scalar values,
+     * or a resource for a file upload. Here we iterate through all available
+     * data and identify how to handle each scenario
+     *
+     * @param string|bool|array|DateTime|ArrayAccess|SplFileObject $value
      */
-    private function buildAcceptHeader(string $header, int $weight): string
+    protected function makeFormSafe(mixed $value)
     {
-        if ($weight === 1000) {
-            return $header;
+        if ($value instanceof SplFileObject) {
+            return $this->processFiles([$value])[0];
         }
 
-        return trim($header, '; ') . ';q=' . rtrim(sprintf('%0.3f', $weight / 1000), '0');
+        if (is_resource($value)) {
+            $this->has_file = true;
+
+            return $value;
+        }
+
+        if ($value instanceof ModelInterface) {
+            return $this->processModel($value);
+        }
+
+        if (is_array($value) || is_object($value)) {
+            $data = [];
+
+            foreach ($value as $k => $v) {
+                $data[$k] = $this->makeFormSafe($v);
+            }
+
+            return $data;
+        }
+
+        return ObjectSerializer::toString($value);
     }
 
     /**
-     * Calculate the next weight, based on the current one.
-     *
-     * If there are less than 28 "Accept" headers, the weights will be decreased by 1 on its highest significant digit, using the
-     * following formula:
-     *
-     *    next weight = current weight - 10 ^ (floor(log(current weight - 1)))
-     *
-     *    ( current weight minus ( 10 raised to the power of ( floor of (log to the base 10 of ( current weight minus 1 ) ) ) ) )
-     *
-     * Starting from 1000, this generates the following series:
-     *
-     * 1000, 900, 800, 700, 600, 500, 400, 300, 200, 100, 90, 80, 70, 60, 50, 40, 30, 20, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
-     *
-     * The resulting quality codes are closer to the average "normal" usage of them (like "q=0.9", "q=0.8" and so on), but it only works
-     * if there is a maximum of 28 "Accept" headers. If we have more than that (which is extremely unlikely), then we fall back to a 1-by-1
-     * decrement rule, which will result in quality codes like "q=0.999", "q=0.998" etc.
-     *
-     * @param int  $currentWeight varying from 1 to 1000 (will be divided by 1000 to build the quality value)
-     * @param bool $hasMoreThan28Headers
-     * @return int
+     * We are able to handle nested ModelInterface. We do not simply call
+     * json_decode(json_encode()) because any given model may have binary data
+     * or other data that cannot be serialized to a JSON string
      */
-    public function getNextWeight(int $currentWeight, bool $hasMoreThan28Headers): int
+    protected function processModel(ModelInterface $model): array
     {
-        if ($currentWeight <= 1) {
-            return 1;
+        $result = [];
+
+        foreach ($model::openAPITypes() as $name => $type) {
+            $value = $model->offsetGet($name);
+
+            if ($value === null) {
+                continue;
+            }
+
+            if (str_contains($type, '\SplFileObject')) {
+                $file = is_array($value) ? $value : [$value];
+                $result[$name] = $this->processFiles($file);
+
+                continue;
+            }
+
+            if ($value instanceof ModelInterface) {
+                $result[$name] = $this->processModel($value);
+
+                continue;
+            }
+
+            if (is_array($value) || is_object($value)) {
+                $result[$name] = $this->makeFormSafe($value);
+
+                continue;
+            }
+
+            $result[$name] = ObjectSerializer::toString($value);
         }
 
-        if ($hasMoreThan28Headers) {
-            return $currentWeight - 1;
+        return $result;
+    }
+
+    /**
+     * Handle file data
+     */
+    protected function processFiles(array $files): array
+    {
+        $this->has_file = true;
+
+        $result = [];
+
+        foreach ($files as $i => $file) {
+            if (is_array($file)) {
+                $result[$i] = $this->processFiles($file);
+
+                continue;
+            }
+
+            if ($file instanceof StreamInterface) {
+                $result[$i] = $file;
+
+                continue;
+            }
+
+            if ($file instanceof SplFileObject) {
+                $result[$i] = $this->tryFopen($file);
+            }
         }
 
-        return $currentWeight - 10 ** floor(log10($currentWeight - 1));
+        return $result;
+    }
+
+    private function tryFopen(SplFileObject $file)
+    {
+        return Utils::tryFopen($file->getRealPath(), 'rb');
     }
 }
