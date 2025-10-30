@@ -79,6 +79,8 @@ class HeaderSelector
             return null;
         }
 
+        $accept = array_map(fn ($value) => $value === 'application/json' ? 'application/vnd.saitowag.api+json;version=1.2' : $value, $accept);
+
         # If there's only one Accept header, just use it
         if (count($accept) === 1) {
             return reset($accept);
