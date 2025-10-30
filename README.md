@@ -121,6 +121,65 @@ If you want to filter by multiple columns, you can do that, so `{url}?filter[id]
 
 <strong>However you are not allowed to use one operator multiple times, for the same column.</strong> So `{url}?filter[id]=gte;3&filter[id]=lte;5` is not going to work and might result in unexpected behavior. You can achieve similar result using `{url}?filter[id]=btw;3,5`.
 
+# Changelog
+
+## Moved endpoints
+| date | previous endpoint | new endpoint |
+| :--  | :---------------- | :----------- |
+| 03.09.2025 | DELETE /seller/article | PATCH /seller/articles |
+| 03.09.2025 | PATCH /seller/article | PATCH /seller/articles |
+## Removed endpoints
+
+| date | endpoint |
+| :--  | :------- |
+## Added endpoints
+
+| date | endpoint |
+| :--  | :------- |
+## Changes in request body
+### 03.09.2025
+#### PATCH /seller/articles
+```json
+{
+    \"requiredAdded\": [
+        \"data\"
+    ],
+    \"requiredRemoved\": [
+        \"stock\",
+        \"article_type\"
+    ],
+    \"propertiesAdded\": [
+        \"data\"
+    ],
+    \"propertiesRemoved\": [
+        \"stock\",
+        \"article_type\",
+        \"article_id\",
+        \"customer_article_id\",
+        \"manufacturer_number\",
+        \"manufacturer_name\",
+        \"brand_id\",
+        \"ean\",
+        \"oen\"
+    ]
+}
+```
+
+## Changes in responses
+### 03.09.2025
+#### PATCH /seller/articles
+ - Added responses: 202, 409, 422
+ - Removed responses: 204, 403
+
+Changes for status code `400`:
+
+The reference of the model changed from `B2bFormError` to `FormResponseEmptyBody`:
+```json
+[]
+```
+
+
+
 For more information, please visit [https://www.alzura.com](https://www.alzura.com).
 
 ## Installation & Usage
@@ -168,9 +227,6 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 
-// Configure Bearer (JWT) authorization: OAuthAccessToken
-$config = Tyre24\Seller\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
-
 // Configure API key authorization: X-AUTH-TOKEN
 $config = Tyre24\Seller\Configuration::getDefaultConfiguration()->setApiKey('X-AUTH-TOKEN', 'YOUR_API_KEY');
 // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
@@ -183,20 +239,13 @@ $apiInstance = new Tyre24\Seller\Api\ArticlesApi(
     new GuzzleHttp\Client(),
     $config
 );
-$country = de; // string | country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code).
-$article_type = K; // string | The article type. For a full list of available types, please refer to the endpoint `/common/article-types`.
-$article_id = 123456; // int | Alzura article id.
-$customer_article_id = 10KRXS-20; // string | Original customer article id.
-$manufacturer_number = Alzura Manufacturer; // string | The manufacturer number (valid if used with either the manufacturer name or the the brand id).
-$manufacturer_name = 1234567891200; // string | The manufacturer name (valid if used with the manufacturer number).
-$brand_id = 10; // int | The brand id (valid if used with the manufacturer number).
-$ean = 0101093311309; // string | The article EAN.
-$oen = 4902429499439; // string | The article OEN.
+$articles_request = new \Tyre24\Seller\Model\ArticlesRequest(); // \Tyre24\Seller\Model\ArticlesRequest
 
 try {
-    $apiInstance->deleteAvailableStockByArticleNumberForSeller($country, $article_type, $article_id, $customer_article_id, $manufacturer_number, $manufacturer_name, $brand_id, $ean, $oen);
+    $result = $apiInstance->sellerArticles($articles_request);
+    print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling ArticlesApi->deleteAvailableStockByArticleNumberForSeller: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling ArticlesApi->sellerArticles: ', $e->getMessage(), PHP_EOL;
 }
 
 ```
@@ -207,8 +256,7 @@ All URIs are relative to *https://api-b2b.alzura.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*ArticlesApi* | [**deleteAvailableStockByArticleNumberForSeller**](docs/Api/ArticlesApi.md#deleteavailablestockbyarticlenumberforseller) | **DELETE** /seller/article | Remove the available stock of a given article.
-*ArticlesApi* | [**updateAvailableStockByArticleNumberForSeller**](docs/Api/ArticlesApi.md#updateavailablestockbyarticlenumberforseller) | **PATCH** /seller/article | Update the available stock of a given article.
+*ArticlesApi* | [**sellerArticles**](docs/Api/ArticlesApi.md#sellerarticles) | **PATCH** /seller/articles | Update stocks and prices
 *OrdersApi* | [**changeInvoiceInformationByOrderNumberForSeller**](docs/Api/OrdersApi.md#changeinvoiceinformationbyordernumberforseller) | **PATCH** /seller/order/{order}/invoiceinformation | Change order invoice information
 *OrdersApi* | [**changeOrderPositionStatusForSeller**](docs/Api/OrdersApi.md#changeorderpositionstatusforseller) | **PATCH** /seller/order/{order}/position/{position}/status | Set order position status.
 *OrdersApi* | [**linkTwoExistingOrdersForSeller**](docs/Api/OrdersApi.md#linktwoexistingordersforseller) | **PATCH** /seller/order/{order}/relation | Link two existing orders.
@@ -216,22 +264,31 @@ Class | Method | HTTP request | Description
 *OrdersApi* | [**setTrackingCompanyAndParcelNumberForSeller**](docs/Api/OrdersApi.md#settrackingcompanyandparcelnumberforseller) | **PATCH** /seller/order/{order}/tracking | Set tracking company and parcel number(s).
 *OrdersApi* | [**updatePaymentStatusByOrderNumberForSeller**](docs/Api/OrdersApi.md#updatepaymentstatusbyordernumberforseller) | **PATCH** /seller/order/{order}/paymentstatus | Update the payment status of a given order.
 *OrdersApi* | [**uploadDeliveryNotePdfByOrderNumberForSeller**](docs/Api/OrdersApi.md#uploaddeliverynotepdfbyordernumberforseller) | **PATCH** /seller/order/{order}/deliverynote | Upload a delivery note for an order
-*OrdersApi* | [**uploadInvoicePdfByOrderNumberForSeller**](docs/Api/OrdersApi.md#uploadinvoicepdfbyordernumberforseller) | **PATCH** /seller/order/{order}/invoicepdf | Upload an invoice pdf for an order
+*OrdersApi* | [**uploadInvoicePdfByOrderNumberForSeller**](docs/Api/OrdersApi.md#uploadinvoicepdfbyordernumberforseller) | **PATCH** /seller/order/{order}/invoicepdf | Upload an invoice pdf with optional XML e-invoice-attachment for an order
 *OrdersApi* | [**uploadRefundPdfByOrderNumberForSeller**](docs/Api/OrdersApi.md#uploadrefundpdfbyordernumberforseller) | **PATCH** /seller/order/{order}/refundpdf | Upload a refund pdf for an order
 
 ## Models
 
 - [AccessControlErrorResponse](docs/Model/AccessControlErrorResponse.md)
+- [ArticlesRequest](docs/Model/ArticlesRequest.md)
+- [ArticlesRequestData](docs/Model/ArticlesRequestData.md)
 - [B2bFormError](docs/Model/B2bFormError.md)
-- [DeleteAvailableStockByArticleNumberForSeller400Response](docs/Model/DeleteAvailableStockByArticleNumberForSeller400Response.md)
-- [DeleteAvailableStockByArticleNumberForSeller403Response](docs/Model/DeleteAvailableStockByArticleNumberForSeller403Response.md)
+- [EANArticleRequest](docs/Model/EANArticleRequest.md)
+- [IterableFormErrorResponse](docs/Model/IterableFormErrorResponse.md)
 - [ModelPaymentStatusUpdate](docs/Model/ModelPaymentStatusUpdate.md)
 - [ModelStatusUpdate](docs/Model/ModelStatusUpdate.md)
+- [OENArticleRequest](docs/Model/OENArticleRequest.md)
+- [PriceDataRequest](docs/Model/PriceDataRequest.md)
 - [RequestInvoiceinformation](docs/Model/RequestInvoiceinformation.md)
 - [RequestOrderRelation](docs/Model/RequestOrderRelation.md)
 - [RequestPdf](docs/Model/RequestPdf.md)
-- [RequestStockUpdate](docs/Model/RequestStockUpdate.md)
 - [RequestTrackingInformation](docs/Model/RequestTrackingInformation.md)
+- [SellerArticles401Response](docs/Model/SellerArticles401Response.md)
+- [SellerArticles422Response](docs/Model/SellerArticles422Response.md)
+- [SellerArticles429Response](docs/Model/SellerArticles429Response.md)
+- [SetOrderStatusByOrderNumberForSeller400Response](docs/Model/SetOrderStatusByOrderNumberForSeller400Response.md)
+- [UPUIDArticleRequest](docs/Model/UPUIDArticleRequest.md)
+- [WearpartArticleRequest](docs/Model/WearpartArticleRequest.md)
 
 ## Authorization
 
@@ -290,6 +347,6 @@ info@alzura.com
 
 This PHP package is automatically generated by the [OpenAPI Generator](https://openapi-generator.tech) project:
 
-- API version: `1.1`
-    - Generator version: `7.14.0`
+- API version: `1.2`
+    - Generator version: `7.17.0`
 - Build package: `org.openapitools.codegen.languages.PhpNextgenClientCodegen`

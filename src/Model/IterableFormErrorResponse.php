@@ -1,7 +1,7 @@
 <?php
 
 /**
- * RequestTrackingInformation
+ * IterableFormErrorResponse
  *
  * PHP version 8.1
  *
@@ -36,14 +36,14 @@ use ReturnTypeWillChange;
 use Tyre24\Seller\ObjectSerializer;
 
 /**
- * RequestTrackingInformation Class Doc Comment
+ * IterableFormErrorResponse Class Doc Comment
  *
  * @package  Tyre24\Seller
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSerializable
+class IterableFormErrorResponse implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
       *
       * @var string
       */
-    protected static string $openAPIModelName = 'RequestTrackingInformation';
+    protected static string $openAPIModelName = 'IterableFormErrorResponse';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -60,8 +60,8 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
       * @var array<string, string>
       */
     protected static array $openAPITypes = [
-        'shipping_company_id' => 'int',
-        'parcel_numbers' => 'string[]'
+        'field' => 'string',
+        'errors' => '\Tyre24\Seller\Model\B2bFormError[]'
     ];
 
     /**
@@ -70,8 +70,8 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
       * @var array<string, string|null>
       */
     protected static array $openAPIFormats = [
-        'shipping_company_id' => null,
-        'parcel_numbers' => null
+        'field' => null,
+        'errors' => null
     ];
 
     /**
@@ -80,8 +80,8 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
       * @var array<string, bool>
       */
     protected static array $openAPINullables = [
-        'shipping_company_id' => false,
-        'parcel_numbers' => false
+        'field' => false,
+        'errors' => false
     ];
 
     /**
@@ -170,8 +170,8 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'shipping_company_id' => 'shipping_company_id',
-        'parcel_numbers' => 'parcel_numbers'
+        'field' => 'field',
+        'errors' => 'errors'
     ];
 
     /**
@@ -180,8 +180,8 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $setters = [
-        'shipping_company_id' => 'setShippingCompanyId',
-        'parcel_numbers' => 'setParcelNumbers'
+        'field' => 'setField',
+        'errors' => 'setErrors'
     ];
 
     /**
@@ -190,8 +190,8 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $getters = [
-        'shipping_company_id' => 'getShippingCompanyId',
-        'parcel_numbers' => 'getParcelNumbers'
+        'field' => 'getField',
+        'errors' => 'getErrors'
     ];
 
     /**
@@ -250,8 +250,8 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('shipping_company_id', $data ?? [], null);
-        $this->setIfExists('parcel_numbers', $data ?? [], null);
+        $this->setIfExists('field', $data ?? [], null);
+        $this->setIfExists('errors', $data ?? [], null);
     }
 
     /**
@@ -281,11 +281,11 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
     {
         $invalidProperties = [];
 
-        if ($this->container['shipping_company_id'] === null) {
-            $invalidProperties[] = "'shipping_company_id' can't be null";
+        if ($this->container['field'] === null) {
+            $invalidProperties[] = "'field' can't be null";
         }
-        if ($this->container['parcel_numbers'] === null) {
-            $invalidProperties[] = "'parcel_numbers' can't be null";
+        if ($this->container['errors'] === null) {
+            $invalidProperties[] = "'errors' can't be null";
         }
         return $invalidProperties;
     }
@@ -303,55 +303,55 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
 
 
     /**
-     * Gets shipping_company_id
+     * Gets field
      *
-     * @return int
+     * @return string
      */
-    public function getShippingCompanyId(): int
+    public function getField(): string
     {
-        return $this->container['shipping_company_id'];
+        return $this->container['field'];
     }
 
     /**
-     * Sets shipping_company_id
+     * Sets field
      *
-     * @param int $shipping_company_id The shipping company id.
+     * @param string $field 
      *
      * @return $this
      */
-    public function setShippingCompanyId(int $shipping_company_id): static
+    public function setField(string $field): static
     {
-        if (is_null($shipping_company_id)) {
-            throw new InvalidArgumentException('non-nullable shipping_company_id cannot be null');
+        if (is_null($field)) {
+            throw new InvalidArgumentException('non-nullable field cannot be null');
         }
-        $this->container['shipping_company_id'] = $shipping_company_id;
+        $this->container['field'] = $field;
 
         return $this;
     }
 
     /**
-     * Gets parcel_numbers
+     * Gets errors
      *
-     * @return string[]
+     * @return \Tyre24\Seller\Model\B2bFormError[]
      */
-    public function getParcelNumbers(): array
+    public function getErrors(): array
     {
-        return $this->container['parcel_numbers'];
+        return $this->container['errors'];
     }
 
     /**
-     * Sets parcel_numbers
+     * Sets errors
      *
-     * @param string[] $parcel_numbers The parcel number(s). At least 3 characters long.
+     * @param \Tyre24\Seller\Model\B2bFormError[] $errors 
      *
      * @return $this
      */
-    public function setParcelNumbers(array $parcel_numbers): static
+    public function setErrors(array $errors): static
     {
-        if (is_null($parcel_numbers)) {
-            throw new InvalidArgumentException('non-nullable parcel_numbers cannot be null');
+        if (is_null($errors)) {
+            throw new InvalidArgumentException('non-nullable errors cannot be null');
         }
-        $this->container['parcel_numbers'] = $parcel_numbers;
+        $this->container['errors'] = $errors;
 
         return $this;
     }

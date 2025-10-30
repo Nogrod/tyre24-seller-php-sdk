@@ -1,0 +1,1445 @@
+openapi: 3.1.0
+info:
+    title: 'API-B2B Seller'
+    description: |4+
+          ## API Versioning
+        We're constantly updating and improving the API, and while we try to ensure backwards compatibility, there's always a chance that we'll introduce a change that affects the way your app works.
+
+        To get around any problems that this might cause, we recommend that you include the Accept header with every API request that you make. This header enables you to target your request to a particular version of the API. It looks like this in HTTP:
+
+        ```text
+        Accept: application/vnd.saitowag.api+json;version={version_number}
+        ```
+
+        Normally, you set the value of the placeholder to the current version of the API. But if you're troubleshooting your app, and you know that an older version of the API works perfectly, say version 1.0, you'd substitute 1.0 for the placeholder value. The API then handles the request as if it were for version 1.0, and your app goes back to working properly.
+
+        ### Example of an error with invalid `ACCEPT` header.
+        The `HTTP status code` in case of an invalid `ACCEPT` header will be `400 Bad Request` and the following response will be returned.
+        ```json
+          {
+            "data": [
+              {
+                "error_code": "ERR_ACCEPT_HEADER_NOT_VALID",
+                "error_message": "Accept header is not valid or not set."
+              }
+            ]
+          }
+        ```
+
+        ### Unexpected Error
+        If an unexpected error occours, a so called Error General will be returned.
+        The `HTTP status code` in case of an invalid `ACCEPT` header will be `500` and the following response will be returned.
+        ```json
+        {
+          "data": [
+            {
+              "error_code": "ERR_GENERAL",
+              "error_message": "An unexpected error has occurred. If this problem persists, please contact our support."
+            }
+          ]
+        }
+        ```
+
+        ### Invalid Endpoint Error
+        Any call to a non-existing API endpoint (i.e. wrong route) will return a response with `HTTP status code` `404`
+        and the following response body:
+        ```json
+        {
+          "data": [
+            {
+              "error_code": "ERR_GENERAL_INVALID_ENDPOINT",
+              "error_message": "The requested endpoint does not exist."
+            }
+          ]
+        }
+        ```
+
+        Please, note that this error is returned also when a request parameter, part of a valid route, is not well formed.
+        For example, a call to a route that contains a wrong order id (i.e. it does not meet the accepted order id pattern -
+        e.g. 123456789PAC instead of PAC123456789) will return the error just mentioned, as the route is considered as badly
+        formed.
+
+        In conclusion, please pay special attention to all those routes that have request parameters with specific pattern
+        requirements.
+
+        ### Shipping Method IDs
+        These ids may not be available in all the countries.
+
+        | ID | Name |
+        | --- | --- |
+        | 1 | Standard `Standard` |
+        | 2 | Self-collection `Selbstabholung`  |
+        | 3 | Express morning (truck) `Express-Morgen (LKW)` |
+        | 4 | Express Today (Truck)  `Express-Heute (LKW)` |
+        | 5 | Express morning (package forwarding) `Express-Morgen (Packet Spedition)` |
+        | 7 | Express-now |
+
+        ### Payment Method IDs
+        These ids may not be available in all the countries.
+
+        | ID | Name |
+        | --- | --- |
+        | 1 | SEPA Direct Debit `SEPA-Lastschrift` |
+        | 2 | Prepayment `Vorkasse` |
+        | 3 | Cash on delivery `Nachnahme` |
+        | 4 | PayPal/Credit Card `PayPal/Kreditkarte` |
+        | 5 | open payment method `offene Zahlungsart` |
+        | 7 | Invoice(8 days payment term) `Rechnung(8 Tage Zahlungsziel)` |
+        | 8 | open payment method (SEPA) `offene Zahlungsart (SEPA)` |
+
+        ## Query String Filters
+
+
+
+
+
+        <details>
+        <summary><strong id="query-string-filters">Query String Filters</strong></summary>
+
+        | Operator | Full Name | Description | Example |
+        | ------ | ------ | ------ | ------ |
+        | eq | Equal | Used to narrow down the result of a query to some specific value, for specified field. It adds the "**=**" symbol to the SQL query. Eg. `{url}?filter[{alias_name}]=eq;11` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} = 11` | integer: `{url}?filter[id]=eq;21`<br>float: `{url}?filter[average]=eq;3.7`<br>string: `{url}?filter[free_text]=eq;apple`<br>Date: `{url}?filter[birthday]=eq;2020-06-03`<br>DateTime: `{url}?filter[created_at]=eq;2020-06-03 14:32:32`<br>boolean: `{url}?filter[is_active]=eq;1`<br> |
+        | neq | Not equal | Used to exclude the value from a query result. It adds the "**<>**" symbol to the SQL query. Eg. `{url}?filter[{alias_name}]=neq;11` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} <> 11` | integer: `{url}?filter[id]=neq;21`<br>float: `{url}?filter[average]=neq;3.7`<br>string: `{url}?filter[free_text]=neq;apple`<br>Date: `{url}?filter[birthday]=neq;2020-06-03`<br>DateTime: `{url}?filter[created_at]=neq;2020-06-03 14:32:32`<br>boolean: `{url}?filter[is_active]=neq;1`<br> |
+        | gt | Greater than | Used to reduce fetched values to those greater than the one provided in a query string. It adds the "**>**" symbol to the SQL query. Eg. `{url}?filter[{alias_name}]=gt;11` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} > 11` | integer: `{url}?filter[id]=gt;21`<br>float: `{url}?filter[average]=gt;3.7`<br>Date: `{url}?filter[birthday]=gt;2020-06-03`<br>DateTime: `{url}?filter[created_at]=gt;2020-06-03 14:32:32`<br> |
+        | gte | Greater than or equal | Used to reduce fetched values to those greater than or equal to the one provided in a query string. It adds the "**>=**" symbol to the SQL query. Eg. `{url}?filter[{alias_name}]=gte;11` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} >= 11` | integer: `{url}?filter[id]=gte;21`<br>float: `{url}?filter[average]=gte;3.7`<br>Date: `{url}?filter[birthday]=gte;2020-06-03`<br>DateTime: `{url}?filter[created_at]=gte;2020-06-03 14:32:32`<br> |
+        | lt | Less than | Used to reduce fetched values to those less than provided in a query string. It adds the "**<**" symbol to the SQL query. Eg. `{url}?filter[{alias_name}]=lt;11` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} < 11` | integer: `{url}?filter[id]=lt;21`<br>float: `{url}?filter[average]=lt;3.7`<br>Date: `{url}?filter[birthday]=lt;2020-06-03`<br>DateTime: `{url}?filter[created_at]=lt;2020-06-03 14:32:32`<br> |
+        | lte | Less than or equal | Used to reduce fetched values to those less than or equal to the one provided in a query string. It adds the "**<=**" symbol to the SQL query. Eg. `{url}?filter[{alias_name}]=lte;11` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} <= 11` | integer: `{url}?filter[id]=lte;21`<br>float: `{url}?filter[average]=lte;3.7`<br>Date: `{url}?filter[birthday]=lte;2020-06-03`<br>DateTime: `{url}?filter[created_at]=lte;2020-06-03 14:32:32`<br> |
+        | in | In | Used to narrow down the query result to multiple, specific entries. It adds the **IN** keyword to the SQL query. Eg. `{url}?filter[{alias_name}]=in;1,2,3,4` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} IN (1, 2, 3, 4)` | integer: `{url}?filter[id]=in;21,55,76`<br>float: `{url}?filter[average]=in;3.7,6.5,9.9`<br>string: `{url}?filter[free_text]=in;apple,pear,watermelon`<br>Date: `{url}?filter[birthday]=in;2020-06-03,2021-10-13,2021-10-14`<br>DateTime: `{url}?filter[created_at]=in;2020-06-03 14:32:32,2020-09-12 17:35:32,2021-06-04 15:36:32`<br> |
+        | nin | Not in | Used to exclude multiple values from query result. It adds the **NOT IN** keyword to the SQL query. Eg. `{url}?filter[{alias_name}]=nin;1,2,3,4` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} NOT IN (1, 2, 3, 4)` | integer: `{url}?filter[id]=nin;21,55,76`<br>float: `{url}?filter[average]=nin;3.7,6.5,9.9`<br>string: `{url}?filter[free_text]=nin;apple,pear,watermelon`<br>Date: `{url}?filter[birthday]=nin;2020-06-03,2021-10-13,2021-10-14`<br>DateTime: `{url}?filter[created_at]=nin;2020-06-03 14:32:32,2020-09-12 17:35:32,2021-06-04 15:36:32`<br> |
+        | wc | Like | Used to find specified pattern. It adds the **LIKE** keyword to the SQL query. Eg. `{url}?filter[{alias_name}]=wc;j**n** doe` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} LIKE 'j%n% doe'` | string: `{url}?filter[free_text]=wc;j**n** doe`<br> |
+        | nwc | Not like | Used to find everything but the specified pattern. It adds the **NOT LIKE** keyword to the SQL query. Eg. `{url}?filter[{alias_name}]=nwc;j**n** doe` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} NOT LIKE 'j%n% doe'` | string: `{url}?filter[free_text]=nwc;j**n** doe`<br> |
+        | btw | Between | Used to find results containing values between two, specified values. It adds the **BETWEEN** keyword to the SQL query. Eg. `{url}?filter[{alias_name}]=btw;10,20` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} BETWEEN 10 AND 20` | integer: `{url}?filter[id]=btw;21,55`<br>float: `{url}?filter[average]=btw;3.7,6.5`<br>Date: `{url}?filter[birthday]=btw;2020-06-03,2021-10-13`<br>DateTime: `{url}?filter[created_at]=btw;2020-06-03 14:32:32,2020-09-12 17:35:32`<br> |
+        | rxp | Regular expression | Used to find results matching the regular expression. It adds the **REGEXP** keyword to the SQL query. Eg. `{url}?filter[{alias_name}]=rxp;j(oh\|a)ne` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} REGEXP 'j(oh\|a)ne?'` | string: `{url}?filter[free_text]=rxp;j(oh\|a)ne?`<br> |
+        | null | Is null | Used to find results that values of specified column are set to null. It adds the **IS NULL** keyword to the SQL query. Eg. `{url}?filter[{alias_name}]=null;` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} IS NULL` | integer: `{url}?filter[id]=null;`<br>float: `{url}?filter[average]=null;`<br>string: `{url}?filter[free_text]=null;`<br>Date: `{url}?filter[birthday]=null;`<br>DateTime: `{url}?filter[created_at]=null;`<br>boolean: `{url}?filter[is_active]=null;`<br> |
+        | nnull | Is not null | Used to find results that values of specified column are not set to null. It adds the **IS NOT NULL** keyword to the SQL query. Eg. `{url}?filter[{alias_name}]=nnull;` will result in the following sql: `SELECT {field_name} AS {alias_name} FROM {table_name} WHERE {alias_name} IS NOT NULL` | integer: `{url}?filter[id]=nnull;`<br>float: `{url}?filter[average]=nnull;`<br>string: `{url}?filter[free_text]=nnull;`<br>Date: `{url}?filter[birthday]=nnull;`<br>DateTime: `{url}?filter[created_at]=nnull;`<br>boolean: `{url}?filter[is_active]=nnull;`<br> |
+        </details>
+
+
+
+
+
+        ### Additional information
+        If you want to filter by multiple columns, you can do that, so `{url}?filter[id]=gt;3&filter[email]=like;**@gmail.com&filter[is_active]=eq;1` is a valid query string.
+
+        <strong>However you are not allowed to use one operator multiple times, for the same column.</strong> So `{url}?filter[id]=gte;3&filter[id]=lte;5` is not going to work and might result in unexpected behavior. You can achieve similar result using `{url}?filter[id]=btw;3,5`.
+
+        # Changelog
+
+        ## Moved endpoints
+        | date | previous endpoint | new endpoint |
+        | :--  | :---------------- | :----------- |
+        | 03.09.2025 | DELETE /seller/article | PATCH /seller/articles |
+        | 03.09.2025 | PATCH /seller/article | PATCH /seller/articles |
+        ## Removed endpoints
+
+        | date | endpoint |
+        | :--  | :------- |
+        ## Added endpoints
+
+        | date | endpoint |
+        | :--  | :------- |
+        ## Changes in request body
+        ### 03.09.2025
+        #### PATCH /seller/articles
+        ```json
+        {
+            "requiredAdded": [
+                "data"
+            ],
+            "requiredRemoved": [
+                "stock",
+                "article_type"
+            ],
+            "propertiesAdded": [
+                "data"
+            ],
+            "propertiesRemoved": [
+                "stock",
+                "article_type",
+                "article_id",
+                "customer_article_id",
+                "manufacturer_number",
+                "manufacturer_name",
+                "brand_id",
+                "ean",
+                "oen"
+            ]
+        }
+        ```
+
+        ## Changes in responses
+        ### 03.09.2025
+        #### PATCH /seller/articles
+         - Added responses: 202, 409, 422
+         - Removed responses: 204, 403
+
+        Changes for status code `400`:
+
+        The reference of the model changed from `B2bFormError` to `FormResponseEmptyBody`:
+        ```json
+        []
+        ```
+
+    contact:
+        name: 'ALZURA AG'
+        url: 'https://www.alzura.com'
+        email: info@alzura.com
+    version: '1.2'
+servers:
+    -
+        url: 'https://api-b2b.alzura.com'
+        description: 'Production server (uses live data)'
+paths:
+    /seller/articles:
+        patch:
+            tags:
+                - articles
+            summary: 'Update stocks and prices'
+            description: |-
+                This endpoint may be used to update multiple articles of different article types, such as tyres or wearparts, at once. Using this endpoint the stock of an article can be updated and optionally the prices and the prices for one article, if supported. The article amount is bordered to 200 per request.
+
+                At least one of the following identifiers (or identifier group) needs to be passed for each article. The order in this table represents the internal priority of the identifiers.
+
+                | Identifier |
+                | ------ |
+                | alzura_item_id |
+                | customer_article_id |
+                | ean |
+                | oen |
+                | upuid |
+                | manufacturer_name + manufacturer_number |
+                | brand_id + manufacturer_number |
+            operationId: seller-articles
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ArticlesRequest'
+            responses:
+                '202':
+                    description: 'The quick validation of the data was successful and will be processed in the background.'
+                    headers:
+                        X-RateLimit-Limit:
+                            description: 'Total number of requests allowed for the logged-in user in a given period of time. (Maximum 3 requests in 10 seconds)'
+                            schema:
+                                type: integer
+                        X-RateLimit-Remaining:
+                            description: 'Remaining requests allowed to the logged-in user. (Example: 2)'
+                            schema:
+                                type: integer
+                        X-RateLimit-Reset:
+                            description: 'The timestamp when the limit will be reset to its initial value.'
+                            schema:
+                                type: integer
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/FormResponseEmptyBody'
+                '400':
+                    description: 'Returned if an article import is currently running.'
+                    headers:
+                        X-RateLimit-Limit:
+                            description: 'Total number of requests allowed for the logged-in user in a given period of time. (Maximum 3 requests in 10 seconds)'
+                            schema:
+                                type: integer
+                        X-RateLimit-Remaining:
+                            description: 'Remaining requests allowed to the logged-in user. (Example: 2)'
+                            schema:
+                                type: integer
+                        X-RateLimit-Reset:
+                            description: 'The timestamp when the limit will be reset to its initial value.'
+                            schema:
+                                type: integer
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/FormResponseEmptyBody'
+                '409':
+                    description: 'Returned if more than 200 articles were sent.'
+                    headers:
+                        X-RateLimit-Limit:
+                            description: 'Total number of requests allowed for the logged-in user in a given period of time. (Maximum 3 requests in 10 seconds)'
+                            schema:
+                                type: integer
+                        X-RateLimit-Remaining:
+                            description: 'Remaining requests allowed to the logged-in user. (Example: 2)'
+                            schema:
+                                type: integer
+                        X-RateLimit-Reset:
+                            description: 'The timestamp when the limit will be reset to its initial value.'
+                            schema:
+                                type: integer
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/FormResponseEmptyBody'
+                '422':
+                    description: 'The validation of the data sent to the endpoint failed.'
+                    headers:
+                        X-RateLimit-Limit:
+                            description: 'Total number of requests allowed for the logged-in user in a given period of time. (Maximum 3 requests in 10 seconds)'
+                            schema:
+                                type: integer
+                        X-RateLimit-Remaining:
+                            description: 'Remaining requests allowed to the logged-in user. (Example: 2)'
+                            schema:
+                                type: integer
+                        X-RateLimit-Reset:
+                            description: 'The timestamp when the limit will be reset to its initial value.'
+                            schema:
+                                type: integer
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/IterableFormErrorResponse' } }
+                                type: object
+                            example:
+                                data:
+                                    - { field: 'data[n]', errors: [{ error_code: ERR_MISSING_ARTICLE_IDENTIFIER, error_message: 'No identification was found for the article.' }] }
+                                    - { field: 'data[n][type]', errors: [{ error_code: ERR_NOT_BLANK, error_message: 'The field must not be empty.' }, { error_code: ERR_VALUE_INVALID, error_message: 'Invalid value.' }] }
+                                    - { field: 'data[n][stock]', errors: [{ error_code: ERR_NOT_BLANK, error_message: 'The field must not be empty.' }, { error_code: 'ERR_GREATER_THAN_OR_EQUAL_{{ compared_value }}', error_message: 'The field needs to be greater than or equal to 0.' }, { error_code: ERR_VALUE_INVALID, error_message: 'Invalid value.' }] }
+                                    - { field: 'data[n][alzura_item_id]', errors: [{ error_code: ERR_VALUE_INVALID, error_message: 'Invalid value.' }] }
+                                    - { field: 'data[n][customer_article_id]', errors: [{ error_code: ERR_VALUE_INVALID, error_message: 'Invalid value.' }] }
+                                    - { field: 'data[n][ean]', errors: [{ error_code: ERR_VALUE_INVALID, error_message: 'Invalid value.' }] }
+                                    - { field: 'data[n][oen]', errors: [{ error_code: ERR_VALUE_INVALID, error_message: 'Invalid value.' }] }
+                                    - { field: 'data[n][upuid]', errors: [{ error_code: ERR_VALUE_INVALID, error_message: 'Invalid value.' }] }
+                                    - { field: 'data[n][manufacturer_name]', errors: [{ error_code: ERR_VALUE_INVALID, error_message: 'Invalid value.' }] }
+                                    - { field: 'data[n][manufacturer_number]', errors: [{ error_code: ERR_VALUE_INVALID, error_message: 'Invalid value.' }] }
+                                    - { field: 'data[n][brand_id]', errors: [{ error_code: 'ERR_GREATER_THAN_{{ compared_value }}', error_message: 'The field needs to be greater than 0.' }, { error_code: ERR_VALUE_INVALID, error_message: 'Invalid value.' }] }
+                                    - { field: 'data[n][prices][m]', errors: [{ error_code: ERR_DUPLICATE_COUNTRY_PRICE, error_message: 'The prices for this country were passed twice for this article.' }, { error_code: ERR_NO_COUNTRY_PRICE, error_message: 'At least one price per country must be handed over. If you do not want to pass a price, then please omit the country.' }] }
+                                    - { field: 'data[n][prices][m][country_code]', errors: [{ error_code: ERR_PARAMETER_INVALID_COUNTRY_CODE, error_message: 'The country code is invalid.' }] }
+                                    - { field: 'data[n][prices][m][price]', errors: [{ error_code: 'ERR_GREATER_THAN_{{ compared_value }}', error_message: 'The field needs to be greater than 0.' }, { error_code: ERR_VALUE_INVALID, error_message: 'Invalid value.' }] }
+                                    - { field: 'data[n][prices][m][price_one]', errors: [{ error_code: 'ERR_GREATER_THAN_{{ compared_value }}', error_message: 'The field needs to be greater than 0.' }, { error_code: ERR_VALUE_INVALID, error_message: 'Invalid value.' }] }
+                '429':
+                    description: 'Request limit exceeded.'
+                    headers:
+                        X-RateLimit-Limit:
+                            description: 'Total number of requests allowed for the logged-in user in a given period of time. (Maximum 3 requests in 10 seconds)'
+                            schema:
+                                type: integer
+                        X-RateLimit-Remaining:
+                            description: 'Remaining requests allowed to the logged-in user. (Example: 2)'
+                            schema:
+                                type: integer
+                        X-RateLimit-Reset:
+                            description: 'The timestamp when the limit will be reset to its initial value.'
+                            schema:
+                                type: integer
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/B2bFormError' }
+                                type: object
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            deprecated: false
+            security:
+                -
+                    X-AUTH-TOKEN: []
+    '/seller/order/{order}/status':
+        patch:
+            tags:
+                - orders
+            summary: 'Set order status.'
+            description: |-
+                Set the order status of the specified order with the given status id.
+
+                Some statuses require a comment:
+
+                | Status |
+                | ------ |
+                | DENIED |
+                | SOLD_OUT |
+                | PARTIALLY_CANCELED |
+                | CANCELED_BY_SELLER |
+                | CANCELED_BY_BUYER |
+            operationId: setOrderStatusByOrderNumberForSeller
+            parameters:
+                -
+                    name: country
+                    in: header
+                    description: 'Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned.'
+                    required: true
+                    explode: false
+                    schema:
+                        type: string
+                    example: de
+                -
+                    name: order
+                    in: path
+                    required: true
+                    schema:
+                        description: 'The order id.'
+                        type: string
+                        example: PAC12345670121
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ModelStatusUpdate'
+            responses:
+                '204':
+                    description: 'No content. The request was successful, but the answer deliberately contains no data.'
+                '400':
+                    description: 'Missing or invalid fields.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_ORDER_NOT_VALID, error_message: 'Invalid order id.' }
+                                    - { error_code: ERR_ORDER_UPDATE_FAILED_ARCHIVED_ORDER, error_message: 'It is not possible to modify archived orders.' }
+                                    - { error_code: ERR_STATUS_NOT_VALID, error_message: 'Invalid order status.' }
+                                    - { error_code: ERR_PARAMETER_MISSING_STATUS, error_message: 'Missing order status. Check the GET /common/order-status endpoints response, to see which statuses require a comment.' }
+                                    - { error_code: ERR_STATUS_COMMENT_TOO_LONG, error_message: 'The comment for the status update is too long.' }
+                                    - { error_code: ERR_STATUS_COMMENT_NOT_VALID, error_message: 'The comment for the status update is not valid.' }
+                                    - { error_code: ERR_STATUS_COMMENT_TYPE_NOT_VALID, error_message: 'The comment for the status should be string type.' }
+                                    - { error_code: ERR_UNACCESSIBLE_ORDER, error_message: 'You do not have access to this order.' }
+                                    - { error_code: ERR_NOT_THE_SELLER_OF_ORDER, error_message: 'You are not the seller of this order and therefore have no access to it.' }
+                                    - { error_code: ERR_ORDER_PREFIX_MISSING, error_message: "The prefix of the order number is missing. An example of a correct order number: 'PAC10295620919'." }
+                                    - { error_code: ERR_PARAMETER_MISSING_COUNTRY, error_message: 'Missing country code. Make sure that the code is in ISO2 format.' }
+                                    - { error_code: ERR_PARAMETER_INVALID_COUNTRY_CODE, error_message: 'The country code is invalid.' }
+                                    - { error_code: ERR_ORDER_STATUS_UPDATE_FAILED, error_message: 'The status update failed. Should this problem remain, please contact our support team.' }
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            deprecated: false
+            security:
+                -
+                    X-AUTH-TOKEN: []
+                -
+                    OAuthAccessToken: []
+    '/seller/order/{order}/position/{position}/status':
+        patch:
+            tags:
+                - orders
+            summary: 'Set order position status.'
+            description: 'Change the status for an order. The placeholder {order} should be replaced with the order. Order numbers always begin with a letter or letter abbreviation (e.g. R or PAC). This corresponds to the product type. Parameters must be set as JSON in body.'
+            operationId: changeOrderPositionStatusForSeller
+            parameters:
+                -
+                    name: country
+                    in: header
+                    description: 'Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned.'
+                    required: true
+                    explode: false
+                    schema:
+                        type: string
+                    example: de
+                -
+                    name: order
+                    in: path
+                    required: true
+                    schema:
+                        description: 'The order id.'
+                        type: string
+                        example: PAC12345670121
+                -
+                    name: position
+                    in: path
+                    required: true
+                    schema:
+                        description: 'The id of the position'
+                        type: string
+                        example: '123456'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ModelStatusUpdate'
+            responses:
+                '204':
+                    description: 'No content. The request was successful, but the answer deliberately contains no data.'
+                '400':
+                    description: 'Missing or wrong parameters.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_ORDER_NOT_VALID, error_message: 'Invalid order.' }
+                                    - { error_code: ERR_ORDER_UPDATE_FAILED_ARCHIVED_ORDER, error_message: 'It is not possible to modify archived orders.' }
+                                    - { error_code: ERR_ORDER_PREFIX_MISSING, error_message: "The prefix of the order number is missing. An example of a correct order number: 'PAC10295620919'." }
+                                    - { error_code: ERR_POSITION_NOT_VALID, error_message: 'Ungültige Position.' }
+                                    - { error_code: ERR_PARAMETER_MISSING_COUNTRY, error_message: 'Missing country code. Make sure that the code is in ISO2 format.' }
+                                    - { error_code: ERR_PARAMETER_INVALID_COUNTRY_CODE, error_message: 'The country code is invalid.' }
+                                    - { error_code: ERR_POSITION_STATUS_UPDATE_FAILED, error_message: 'The status update for the given position id failed.' }
+                                    - { error_code: ERR_STATUS_NOT_VALID, error_message: 'Invalid order status.' }
+                                    - { error_code: ERR_PARAMETER_MISSING_STATUS, error_message: 'Missing order status.' }
+                                    - { error_code: ERR_STATUS_COMMENT_TOO_LONG, error_message: 'The comment for the status update is too long.' }
+                                    - { error_code: ERR_STATUS_COMMENT_NOT_VALID, error_message: 'The comment for the status update is not valid.' }
+            deprecated: false
+            security: []
+    '/seller/order/{order}/tracking':
+        patch:
+            tags:
+                - orders
+            summary: 'Set tracking company and parcel number(s).'
+            description: 'Set the tracking company and the parcel number(s) for the specified order id.'
+            operationId: setTrackingCompanyAndParcelNumberForSeller
+            parameters:
+                -
+                    name: country
+                    in: header
+                    description: 'country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code).'
+                    required: true
+                    explode: false
+                    schema:
+                        type: string
+                    example: de
+                -
+                    name: order
+                    in: path
+                    required: true
+                    schema:
+                        description: 'The order id.'
+                        type: string
+                        example: PAC12345670121
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RequestTrackingInformation'
+            responses:
+                '204':
+                    description: 'No content. The request was successful, but the answer deliberately contains no data.'
+                '400':
+                    description: 'Missing or wrong parameters.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_ORDER_UPDATE_FAILED_ARCHIVED_ORDER, error_message: 'It is not possible to modify archived orders.' }
+                                    - { error_code: ERR_UNACCESSIBLE_ORDER, error_message: 'You do not have access to this order.' }
+                                    - { error_code: ERR_NOT_THE_SELLER_OF_ORDER, error_message: 'You are not the seller of this order and therefore have no access.' }
+                                    - { error_code: ERR_GENERAL_BAD_REQUEST, error_message: 'Missing or wrong parameters.' }
+                                    - { error_code: ERR_PARAMETER_MISSING_PARCEL_NUMBERS, error_message: 'Missing parcel number(s).' }
+                                    - { error_code: ERR_PARAMETER_MISSING_SHIPPING_COMPANY_ID, error_message: 'Missing shipping company.' }
+                                    - { error_code: ERR_PARAMETER_MISSING_COUNTRY, error_message: 'Missing country. Please use a country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code, e.g. de).' }
+                                    - { error_code: ERR_PARAMETER_INVALID_COUNTRY_CODE, error_message: 'Invalid country code.' }
+                                    - { error_code: ERR_SHIPPING_COMPANY_NOT_AVAILABLE_IN_CURRENT_COUNTRY, error_message: 'The shipping company is not available in your country.' }
+                                    - { error_code: ERR_ORDER_NOT_VALID, error_message: 'Invalid order.' }
+                                    - { error_code: ERR_ORDER_PREFIX_MISSING, error_message: "The prefix of the order number is missing. An example of a correct order number: 'PAC10295620919'." }
+                                    - { error_code: ERR_MESSAGE_SHIPPING_NUMBER_URLS_NOT_ACCEPTED, error_message: 'The tracking number cannot contain links. Please enter only the tracking number.' }
+                                    - { error_code: ERR_MESSAGE_SHIPPING_NUMBER_HTML_NOT_ACCEPTED, error_message: 'The tracking number cannot contain HTML. Please enter only the tracking number.' }
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            deprecated: false
+            security:
+                -
+                    X-AUTH-TOKEN: []
+                -
+                    OAuthAccessToken: []
+    '/seller/order/{order}/invoicepdf':
+        patch:
+            tags:
+                - orders
+            summary: 'Upload an invoice pdf with optional XML e-invoice-attachment for an order'
+            description: 'With this endpoint you can upload an invoice pdf with an optional XML e-invoice-attachment for an order, by specifying the base64 encoded pdf in your request body.'
+            operationId: uploadInvoicePdfByOrderNumberForSeller
+            parameters:
+                -
+                    name: country
+                    in: header
+                    description: 'Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned.'
+                    required: true
+                    explode: false
+                    schema:
+                        type: string
+                    example: de
+                -
+                    name: order
+                    in: path
+                    required: true
+                    schema:
+                        description: 'The order id.'
+                        type: string
+                        example: PAC12345670121
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RequestPdf'
+            responses:
+                '204':
+                    description: 'No Content. The request was successful, but the answer deliberately contains no data.'
+                '400':
+                    description: 'Missing or invalid fields.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_UNACCESSIBLE_ORDER, error_message: 'You do not have access to this order.' }
+                                    - { error_code: ERR_ORDER_UPDATE_FAILED_ARCHIVED_ORDER, error_message: 'It is not possible to modify archived orders.' }
+                                    - { error_code: ERR_INVOICE_PDF_FILE_INVALID_TYPE, error_message: 'The invoice file has the wrong format. It must be a PDF file.' }
+                                    - { error_code: ERR_INVOICE_PDF_IS_MISSING, error_message: 'The invoice PDF file is missing.' }
+                                    - { error_code: ERR_PARAMETER_MISSING_COUNTRY, error_message: 'Missing country code. Make sure that the code is in ISO2 format.' }
+                                    - { error_code: ERR_PARAMETER_INVALID_COUNTRY_CODE, error_message: 'The country code is invalid.' }
+                                    - { error_code: ERR_NOT_THE_SELLER_OF_ORDER, error_message: 'You are not the seller of this order and therefore have no access.' }
+                                    - { error_code: ERR_INVOICE_PDF_COULD_NOT_OPEN_FILE, error_message: 'The PDF could not be opened. If this problem persists, please contact our support.' }
+                                    - { error_code: ERR_INVOICE_PDF_COULD_NOT_SAVE_FILE, error_message: 'The upload of the invoice PDF file has failed. If this problem persists, please contact our support.' }
+                                    - { error_code: ERR_INVOICE_PDF_FILE_TO_BIG, error_message: 'The invoice file is too large. It must not exceed 2048 kilobytes.' }
+                                    - { error_code: ERR_INVOICE_UPDATE_FAILED, error_message: 'The update of the billing information failed. If this problem persists, please contact our support.' }
+                                    - { error_code: ERR_SEND_EMAIL_FAILURE, error_message: 'No e-mail could be sent.' }
+                                    - { error_code: ERR_ORDER_NOT_VALID, error_message: 'Invalid order.' }
+                                    - { error_code: ERR_ORDER_PREFIX_MISSING, error_message: "The prefix of the order number is missing. An example of a correct order number: 'PAC10295620919'." }
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            deprecated: false
+            security:
+                -
+                    X-AUTH-TOKEN: []
+                -
+                    OAuthAccessToken: []
+    '/seller/order/{order}/refundpdf':
+        patch:
+            tags:
+                - orders
+            summary: 'Upload a refund pdf for an order'
+            description: 'With this endpoint you can upload a refund pdf for an order, by specifying the base64 encoded pdf in your request body.'
+            operationId: uploadRefundPdfByOrderNumberForSeller
+            parameters:
+                -
+                    name: country
+                    in: header
+                    description: 'Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned.'
+                    required: true
+                    explode: false
+                    schema:
+                        type: string
+                    example: de
+                -
+                    name: order
+                    in: path
+                    required: true
+                    schema:
+                        description: 'The order id.'
+                        type: string
+                        example: PAC12345670121
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RequestPdf'
+            responses:
+                '204':
+                    description: 'No Content. The request was successful, but the answer deliberately contains no data.'
+                '400':
+                    description: 'Missing or invalid fields.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_UNACCESSIBLE_ORDER, error_message: 'You do not have access to this order.' }
+                                    - { error_code: ERR_ORDER_UPDATE_FAILED_ARCHIVED_ORDER, error_message: 'It is not possible to modify archived orders.' }
+                                    - { error_code: ERR_REFUND_PDF_FILE_INVALID_TYPE, error_message: 'The refund file has the wrong format. It must be a PDF file.' }
+                                    - { error_code: ERR_REFUND_PDF_IS_MISSING, error_message: 'The refund PDF file is missing.' }
+                                    - { error_code: ERR_PARAMETER_MISSING_COUNTRY, error_message: 'Missing country code. Make sure that the code is in ISO2 format.' }
+                                    - { error_code: ERR_PARAMETER_INVALID_COUNTRY_CODE, error_message: 'The country code is invalid.' }
+                                    - { error_code: ERR_NOT_THE_SELLER_OF_ORDER, error_message: 'You are not the seller of this order and therefore have no access.' }
+                                    - { error_code: ERR_REFUND_PDF_COULD_NOT_OPEN_FILE, error_message: 'The PDF could not be opened. If this problem persists, please contact our support.' }
+                                    - { error_code: ERR_REFUND_PDF_COULD_NOT_SAVE_FILE, error_message: 'The upload of the refund PDF file has failed. If this problem persists, please contact our support.' }
+                                    - { error_code: ERR_REFUND_PDF_FILE_TO_BIG, error_message: 'The refund file is too large. It must not exceed 2048 kilobytes.' }
+                                    - { error_code: ERR_REFUND_UPDATE_FAILED, error_message: 'The update of the refund information failed. If this problem persists, please contact our support.' }
+                                    - { error_code: ERR_REFUND_WITHOUT_INVOICE, error_message: 'Before updating the refund information, an invoice must be provided. If this problem persists, please contact our support.' }
+                                    - { error_code: ERR_SEND_EMAIL_FAILURE, error_message: 'No e-mail could be sent.' }
+                                    - { error_code: ERR_ORDER_NOT_VALID, error_message: 'Invalid order.' }
+                                    - { error_code: ERR_ORDER_PREFIX_MISSING, error_message: "The prefix of the order number is missing. An example of a correct order number: 'PAC10295620919'." }
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            deprecated: false
+            security:
+                -
+                    X-AUTH-TOKEN: []
+                -
+                    OAuthAccessToken: []
+    '/seller/order/{order}/invoiceinformation':
+        patch:
+            tags:
+                - orders
+            summary: 'Change order invoice information'
+            description: 'Change the invoice information of the order with the order number specified in the URL.'
+            operationId: changeInvoiceInformationByOrderNumberForSeller
+            parameters:
+                -
+                    name: country
+                    in: header
+                    description: 'Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned.'
+                    required: true
+                    explode: false
+                    schema:
+                        type: string
+                    example: de
+                -
+                    name: order
+                    in: path
+                    required: true
+                    schema:
+                        description: 'The order id.'
+                        type: string
+                        example: PAC12345670121
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RequestInvoiceinformation'
+            responses:
+                '204':
+                    description: 'No Content. The request was successful, but the answer deliberately contains no data.'
+                '400':
+                    description: 'Some form errors occured.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_INVOICE_SUM_OR_NUMBER_REQUIRED, error_message: 'The invoice amount or invoice number must be indicated.' }
+                                    - { error_code: ERR_PARAMETER_MISSING_COUNTRY, error_message: 'Missing country code. Make sure that the code is in ISO2 format.' }
+                                    - { error_code: ERR_INVOICE_UPDATE_FAILED, error_message: 'The update of the billing information failed. If this problem persists, please contact our support.' }
+                                    - { error_code: ERR_PARAMETER_INVALID_COUNTRY_CODE, error_message: 'The country code is invalid.' }
+                                    - { error_code: ERR_UNACCESSIBLE_ORDER, error_message: 'You do not have access to this order.' }
+                                    - { error_code: ERR_ORDER_UPDATE_FAILED_ARCHIVED_ORDER, error_message: 'It is not possible to modify archived orders.' }
+                                    - { error_code: ERR_NOT_THE_SELLER_OF_ORDER, error_message: 'You are not the seller of this order and therefore have no access.' }
+                                    - { error_code: ERR_VALUE_INVALID, error_message: 'An error occurred during the validation of the entries. Please check whether all entries are correct.' }
+                                    - { error_code: ERR_ORDER_NOT_VALID, error_message: 'Invalid order.' }
+                                    - { error_code: ERR_ORDER_PREFIX_MISSING, error_message: "The prefix of the order number is missing. An example of a correct order number: 'PAC10295620919'." }
+                                    - { error_code: ERR_NOT_THE_SELLER_OF_ORDER, error_message: 'You are not the seller of this order and therefore have no access.' }
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            deprecated: false
+            security:
+                -
+                    X-AUTH-TOKEN: []
+                -
+                    OAuthAccessToken: []
+    '/seller/order/{order}/paymentstatus':
+        patch:
+            tags:
+                - orders
+            summary: 'Update the payment status of a given order.'
+            description: 'Update the payment status of a given order with the one specified in the request.'
+            operationId: updatePaymentStatusByOrderNumberForSeller
+            parameters:
+                -
+                    name: country
+                    in: header
+                    description: 'country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code).'
+                    required: true
+                    explode: false
+                    schema:
+                        type: string
+                    example: de
+                -
+                    name: order
+                    in: path
+                    required: true
+                    schema:
+                        description: 'The order id.'
+                        type: string
+                        example: PAC12345670121
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ModelPaymentStatusUpdate'
+            responses:
+                '204':
+                    description: 'No Content. The request was successful, but the answer deliberately contains no data.'
+                '400':
+                    description: 'Missing or wrong parameters.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_PARAMETER_MISSING_COUNTRY, error_message: 'Missing country. Please use a country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code, e.g. de).' }
+                                    - { error_code: ERR_PARAMETER_INVALID_COUNTRY_CODE, error_message: 'Invalid country code.' }
+                                    - { error_code: ERR_PARAMETER_MISSING_PAYMENT_STATUS, error_message: 'Missing payment status.' }
+                                    - { error_code: ERR_PARAMETER_PAYMENT_STATUS_INVALID_VALUE, error_message: 'The given payment status is not valid.' }
+                                    - { error_code: ERR_UNACCESSIBLE_ORDER, error_message: 'You do not have access to this order.' }
+                                    - { error_code: ERR_NOT_THE_SELLER_OF_ORDER, error_message: 'You are not the seller of this order and do not have access to it.' }
+                                    - { error_code: ERR_ORDER_UPDATE_FAILED_ARCHIVED_ORDER, error_message: 'It is not possible to modify archived orders.' }
+                                    - { error_code: ERR_ORDER_PAYMENT_STATUS_UPDATE_FAILED, error_message: 'Payment status update failed. If this problem persists, please contact our support.' }
+                                    - { error_code: ERR_ORDER_NOT_FOUND, error_message: 'Order not found.' }
+                                    - { error_code: ERR_ORDER_NOT_VALID, error_message: 'Invalid order.' }
+                                    - { error_code: ERR_ORDER_PREFIX_MISSING, error_message: "The prefix of the order number is missing. An example of a correct order number: 'PAC10295620919'." }
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            deprecated: false
+            security:
+                -
+                    X-AUTH-TOKEN: []
+                -
+                    OAuthAccessToken: []
+    '/seller/order/{order}/deliverynote':
+        patch:
+            tags:
+                - orders
+            summary: 'Upload a delivery note for an order'
+            description: 'With this endpoint you can upload a delivery note for an order, by specifying the base64 encoded pdf in your request body.'
+            operationId: uploadDeliveryNotePdfByOrderNumberForSeller
+            parameters:
+                -
+                    name: country
+                    in: header
+                    description: 'Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned.'
+                    required: true
+                    explode: false
+                    schema:
+                        type: string
+                    example: de
+                -
+                    name: order
+                    in: path
+                    required: true
+                    schema:
+                        description: 'The order id.'
+                        type: string
+                        example: PAC12345670121
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RequestPdf'
+            responses:
+                '204':
+                    description: 'No Content. The request was successful, but the answer deliberately contains no data.'
+                '400':
+                    description: 'Missing or invalid fields.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_UNACCESSIBLE_ORDER, error_message: 'You do not have access to this order.' }
+                                    - { error_code: ERR_ORDER_UPDATE_FAILED_ARCHIVED_ORDER, error_message: 'It is not possible to modify archived orders.' }
+                                    - { error_code: ERR_DELIVERY_NOTE_FILE_INVALID_TYPE, error_message: 'The delivery note file has the wrong format. It must be a PDF file.' }
+                                    - { error_code: ERR_DELIVERY_NOTE_IS_MISSING, error_message: 'The delivery note PDF file is missing.' }
+                                    - { error_code: ERR_PARAMETER_MISSING_COUNTRY, error_message: 'Missing country code. Make sure that the code is in ISO2 format.' }
+                                    - { error_code: ERR_PARAMETER_INVALID_COUNTRY_CODE, error_message: 'The country code is invalid.' }
+                                    - { error_code: ERR_NOT_THE_SELLER_OF_ORDER, error_message: 'You are not the seller of this order and therefore have no access.' }
+                                    - { error_code: ERR_DELIVERY_NOTE_COULD_NOT_OPEN_FILE, error_message: 'The PDF could not be opened. If this problem persists, please contact our support.' }
+                                    - { error_code: ERR_DELIVERY_NOTE_COULD_NOT_SAVE_FILE, error_message: 'The upload of the delivery note PDF file has failed. If this problem persists, please contact our support.' }
+                                    - { error_code: ERR_DELIVERY_NOTE_FILE_TO_BIG, error_message: 'The delivery note file is too large. It must not exceed 2048 kilobytes.' }
+                                    - { error_code: ERR_DELIVERY_NOTE_UPLOAD_FAILED, error_message: 'The update of the delivery note failed. If this problem persists, please contact our support.' }
+                                    - { error_code: ERR_SEND_EMAIL_FAILURE, error_message: 'No e-mail could be sent.' }
+                                    - { error_code: ERR_ORDER_NOT_VALID, error_message: 'Invalid order.' }
+                                    - { error_code: ERR_ORDER_PREFIX_MISSING, error_message: "The prefix of the order number is missing. An example of a correct order number: 'PAC10295620919'." }
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            deprecated: false
+            security:
+                -
+                    X-AUTH-TOKEN: []
+                -
+                    OAuthAccessToken: []
+    '/seller/order/{order}/relation':
+        patch:
+            tags:
+                - orders
+            summary: 'Link two existing orders.'
+            description: 'Link the two specified and existing orders. Set the order status of the specified order with the given status id.'
+            operationId: linkTwoExistingOrdersForSeller
+            parameters:
+                -
+                    name: country
+                    in: header
+                    description: 'Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned.'
+                    required: true
+                    explode: false
+                    schema:
+                        type: string
+                    example: de
+                -
+                    name: order
+                    in: path
+                    required: true
+                    schema:
+                        description: 'The order id.'
+                        type: string
+                        example: PAC12345670121
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RequestOrderRelation'
+            responses:
+                '204':
+                    description: 'No content. The request was successful, but the answer deliberately contains no data.'
+                '400':
+                    description: 'Missing or invalid fields.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { type: array, items: { $ref: '#/components/schemas/B2bFormError' } }
+                                type: object
+                            example:
+                                data:
+                                    - { error_code: ERR_ORDER_NOT_VALID, error_message: 'Invalid order id.' }
+                                    - { error_code: ERR_UNACCESSIBLE_ORDER, error_message: 'You do not have access to this order.' }
+                                    - { error_code: ERR_NOT_THE_SELLER_OF_ORDER, error_message: 'You are not the seller of the specified related order and therefore have no access to it.' }
+                                    - { error_code: ERR_ORDER_PREFIX_MISSING, error_message: "The prefix of the order number is missing. An example of a correct order number: 'PAC10295620919'." }
+                                    - { error_code: ERR_PARAMETER_MISSING_COUNTRY, error_message: 'Missing country code. Make sure that the code is in ISO2 format.' }
+                                    - { error_code: ERR_PARAMETER_INVALID_COUNTRY_CODE, error_message: 'The country code is invalid.' }
+                                    - { error_code: ERR_ORDER_RELATION_FAILED, error_message: 'The order relation creation failed. Should this problem remain, please contact our support team.' }
+                '401':
+                    description: 'Authentication failure.'
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    data: { $ref: '#/components/schemas/AccessControlErrorResponse' }
+                                type: object
+            deprecated: false
+            security:
+                -
+                    X-AUTH-TOKEN: []
+                -
+                    OAuthAccessToken: []
+components:
+    schemas:
+        AccessControlErrorResponse:
+            title: AccessControlErrorResponse
+            properties:
+                error:
+                    description: 'The authentication error code.'
+                    type: string
+                    example: ERR_AUTHENTICATION_FAILURE
+            type: object
+        ArticlesRequest:
+            title: ArticlesRequest
+            required:
+                - data
+            properties:
+                data:
+                    description: 'An array filled with objects from the list below. There is no restriction to only one type of object. At least one identifier or identifier combination needs to be passed per article.'
+                    anyOf:
+                        -
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/EANArticleRequest'
+                        -
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/OENArticleRequest'
+                        -
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/UPUIDArticleRequest'
+                        -
+                            type: array
+                            items:
+                                $ref: '#/components/schemas/WearpartArticleRequest'
+            type: object
+        FormResponseEmptyBody:
+            title: EmptyBody
+            type: object
+        IterableFormErrorResponse:
+            title: IterableFormError
+            required:
+                - field
+                - errors
+            properties:
+                field:
+                    description: ''
+                    type: string
+                    example: 'data[0]'
+                errors:
+                    description: ''
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/B2bFormError'
+            type: object
+        B2bFormError:
+            title: B2bFormError
+            required:
+                - error_code
+                - error_message
+            properties:
+                error_code:
+                    description: 'Generic error code'
+                    type: string
+                    example: ERR_EXAMPLE_ERROR
+                error_message:
+                    description: 'Translation of error code'
+                    type: string
+                    example: 'This is a translation for the ERR_EXAMPLE_ERROR'
+            type: object
+        ModelStatusUpdate:
+            title: Entity
+            required:
+                - status_id
+            properties:
+                status_id:
+                    description: 'The status id.'
+                    type: integer
+                    example: 4
+                comment:
+                    description: 'The comment associated to the status update action. For a given subset of the available status ids, a comment will be required.'
+                    type: string
+                    example: 'Status update details.'
+            type: object
+        RequestTrackingInformation:
+            title: TrackingInformation
+            required:
+                - shipping_company_id
+                - parcel_numbers
+            properties:
+                shipping_company_id:
+                    description: 'The shipping company id.'
+                    type: integer
+                    example: 1
+                parcel_numbers:
+                    description: 'The parcel number(s). At least 3 characters long.'
+                    type: array
+                    example:
+                        - 63242259TRS
+                        - 63242259DEL
+                    items:
+                        type: string
+            type: object
+        RequestPdf:
+            title: Pdf
+            required:
+                - pdf
+            properties:
+                pdf:
+                    description: 'The base64 encoded pdf'
+                    type: string
+                    example: JVBERi0xLjcKJeLjz9MKNCAwI...ydHhyZWYKNzU4NgolJUVPRgo=
+            type: object
+        RequestInvoiceinformation:
+            title: Invoiceinformation
+            required:
+                - number
+                - sum
+            properties:
+                number:
+                    description: 'Internal identification number of the invoice'
+                    type: string
+                    example: RNR1234567890
+                sum:
+                    description: 'Total sum of the invoice'
+                    type: number
+                    example: 12.43
+            type: object
+        ModelPaymentStatusUpdate:
+            title: Entity
+            required:
+                - payment_status
+            properties:
+                payment_status:
+                    description: 'The payment status. Possible values: 0 (unpaid) or 1 (paid).'
+                    type: integer
+                    example: 1
+            type: object
+        RequestOrderRelation:
+            title: OrderRelation
+            required:
+                - order
+                - country
+            properties:
+                order:
+                    description: 'Internal identification number of the order'
+                    type: string
+                    example: PAC1234567890
+                country:
+                    description: 'The submitted country, 2 letter iso-code lower case'
+                    type: string
+                    example: de
+            type: object
+        EANArticleRequest:
+            title: EANArticleRequest
+            required:
+                - type
+                - stock
+            properties:
+                type:
+                    description: 'The product type, so `PAC`, `PTO`, `PSR`, `PTY` or `A` for this type.'
+                    type: string
+                    example: PAC
+                ean:
+                    description: 'The European Article Number of the article.'
+                    type: string
+                    example: '4004514219879'
+                manufacturer_name:
+                    description: 'The name of the manufacturer. Must be used together with `manufacturer_number` to have an effect.'
+                    type: string
+                    example: 'Perfect Equipment'
+                stock:
+                    description: 'The amount of articles left in the stock.'
+                    type: integer
+                    example: 80
+                alzura_item_id:
+                    description: 'The unique id of the article.'
+                    type: string
+                    example: 18-7420
+                customer_article_id:
+                    description: 'A internal number given by the customer, to identify an article using a different id than our database.'
+                    type: string
+                    example: RLYC00L
+                manufacturer_number:
+                    description: 'The number of the manufacturer.'
+                    type: string
+                    example: '1001511'
+                prices:
+                    description: 'List of prices for different countries. If activated, the price validation will run for all prices. If the difference of `price_one` is to great in comparison with the normal price it will be capped. If the normal price is <= 250€ (or 1000zł) the cap is 5€. For prices above that border the difference is 2%. At least one price must be given.'
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/PriceDataRequest'
+            type: object
+            description: 'Request object for PAC, PTO or Alloy articles.'
+        OENArticleRequest:
+            title: OENArticleRequest
+            required:
+                - type
+                - stock
+            properties:
+                type:
+                    description: 'The product type, so `POE` or `PUP` for this type.'
+                    type: string
+                    example: PAC
+                oen:
+                    description: 'The Original Equipment Number of the article.'
+                    type: string
+                    example: '4004514219879'
+                manufacturer_name:
+                    description: 'The name of the manufacturer. Must be used together with `manufacturer_number` to have an effect.'
+                    type: string
+                    example: 'Perfect Equipment'
+                stock:
+                    description: 'The amount of articles left in the stock.'
+                    type: integer
+                    example: 80
+                alzura_item_id:
+                    description: 'The unique id of the article.'
+                    type: string
+                    example: 18-7420
+                customer_article_id:
+                    description: 'A internal number given by the customer, to identify an article using a different id than our database.'
+                    type: string
+                    example: RLYC00L
+                manufacturer_number:
+                    description: 'The number of the manufacturer.'
+                    type: string
+                    example: '1001511'
+                prices:
+                    description: 'List of prices for different countries. If activated, the price validation will run for all prices. If the difference of `price_one` is to great in comparison with the normal price it will be capped. If the normal price is <= 250€ (or 1000zł) the cap is 5€. For prices above that border the difference is 2%. At least one price must be given.'
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/PriceDataRequest'
+            type: object
+            description: 'Request object for POE articles.'
+        UPUIDArticleRequest:
+            title: UPUIDArticleRequest
+            required:
+                - type
+                - stock
+            properties:
+                type:
+                    description: 'The product type, so `PUP` for this type.'
+                    type: string
+                    example: PUP
+                upuid:
+                    description: 'The Used Part Unique Identifier of the article.'
+                    type: string
+                    example: e621b9d2a6879eba211bf1d54b977d02
+                oen:
+                    description: 'The Original Equipment Number of the article.'
+                    type: string
+                    example: '4004514219879'
+                manufacturer_name:
+                    description: 'The name of the manufacturer. Must be used together with `manufacturer_number` to have an effect.'
+                    type: string
+                    example: 'Perfect Equipment'
+                stock:
+                    description: 'The amount of articles left in the stock.'
+                    type: integer
+                    example: 80
+                alzura_item_id:
+                    description: 'The unique id of the article.'
+                    type: string
+                    example: 18-7420
+                customer_article_id:
+                    description: 'A internal number given by the customer, to identify an article using a different id than our database.'
+                    type: string
+                    example: RLYC00L
+                manufacturer_number:
+                    description: 'The number of the manufacturer.'
+                    type: string
+                    example: '1001511'
+                prices:
+                    description: 'List of prices for different countries. If activated, the price validation will run for all prices. If the difference of `price_one` is to great in comparison with the normal price it will be capped. If the normal price is <= 250€ (or 1000zł) the cap is 5€. For prices above that border the difference is 2%. At least one price must be given.'
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/PriceDataRequest'
+            type: object
+            description: 'Request object for UPUID articles.'
+        WearpartArticleRequest:
+            title: WearpartArticleRequest
+            required:
+                - type
+                - stock
+            properties:
+                type:
+                    description: 'The product type, so `W` for this type.'
+                    type: string
+                    example: W
+                brand_id:
+                    description: 'The brand_id of the article. Must be used together with `manufacturer_number` to have an effect.'
+                    type: integer
+                    example: 123456
+                stock:
+                    description: 'The amount of articles left in the stock.'
+                    type: integer
+                    example: 80
+                alzura_item_id:
+                    description: 'The unique id of the article.'
+                    type: string
+                    example: 18-7420
+                customer_article_id:
+                    description: 'A internal number given by the customer, to identify an article using a different id than our database.'
+                    type: string
+                    example: RLYC00L
+                manufacturer_number:
+                    description: 'The number of the manufacturer.'
+                    type: string
+                    example: '1001511'
+                prices:
+                    description: 'List of prices for different countries. If activated, the price validation will run for all prices. If the difference of `price_one` is to great in comparison with the normal price it will be capped. If the normal price is <= 250€ (or 1000zł) the cap is 5€. For prices above that border the difference is 2%. At least one price must be given.'
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/PriceDataRequest'
+            type: object
+            description: 'Request object for wearpart articles.'
+        PriceDataRequest:
+            title: PriceDataRequest
+            required:
+                - country_code
+            properties:
+                country_code:
+                    description: 'The ISO-2 lower country code, for which the price shall be applied.'
+                    type: string
+                    example: de
+                price:
+                    description: 'The normal price of the article. The prices must be sent in the same currency as in the CSV import.'
+                    type: number
+                    example: 105.69
+                price_one:
+                    description: 'The price of the article when only one article is ordered. The prices must be sent in the same currency as in the CSV import. This field has only effect for the following types: `PSR`, `PTY`, `R`, `F` and `PUP`'
+                    type: number
+                    example: 105.69
+            type: object
+            description: 'Data object containing country price data.'
+    securitySchemes:
+        API-Key:
+            type: apiKey
+            description: |-
+                You gain access to administrative endpoints by using an API key. This authentication is for internal usage.
+                ### Examples of an authentication error
+
+                The `HTTP status code` in case of an authentication error will be `401 Unauthorized` and the following response will be returned.
+                ```json
+                {
+                  "data": {
+                       "error": "ERR_AUTHENTICATION_FAILURE"
+                  }
+                }
+                ```
+
+                If a user tries to call an endpoint, for which he/she does have the required role, the following response, with `HTTP status code` `401 Unauthorized`, will be returned.
+                ```json
+                {
+                  ""data"": [
+                      {
+                          "error_code": "ERR_AUTHENTICATION_FORBIDDEN",
+                          "error_message": "You do not have access to this endpoint."
+                      }
+                  ]
+                }
+                ```
+            name: X-API-KEY
+            in: header
+        basicAuth:
+            type: http
+            description: |-
+                As a retailer or supplier you can use your credentials to gain access to the ```/common/login``` endpoint.
+                ```text
+                Authorization: Basic base64 encoded(customer-id:password)
+                ```
+                ### Example of an authentication error
+                The `HTTP status code` in case of an authentication error will be `401 Unauthorized` and the following response will be returned.
+                ```json
+                {
+                 "data": {
+                     "error": "ERR_AUTHENTICATION_FAILURE"
+                 }
+                }
+                ```
+            scheme: basic
+        basicAuthOperator:
+            type: http
+            description: |-
+                Use basic HTTP authentication. As an operator use operator id and password. As a customer use email and password.
+                ```text
+                Authorization: Basic base64 encoded(customer-id:password)
+                ```
+            scheme: basic
+        X-AUTH-TOKEN:
+            type: apiKey
+            description: |-
+                Endpoints that require this authentication must send  `X-AUTH-TOKEN` in header. To get such an X-AUTH-TOKEN see `/common/login` endpoint for further information.
+
+                ```text
+                X-AUTH-TOKEN: some-valid-x-auth-token
+                ```
+
+                ### Examples of an authentication error
+                The `HTTP status code` in case of an authentication error will be `401 Unauthorized` and the following response will be returned.
+                ```json
+                {
+                  "data": {
+                       "error": "ERR_AUTHENTICATION_FAILURE"
+                  }
+                }
+                ```
+
+                If a user tries to call an endpoint, for which he/she does have the required role, the following response, with `HTTP status code` `401 Unauthorized`, will be returned.
+                ```json
+                {
+                  "data": [
+                      {
+                          "error_code": "ERR_AUTHENTICATION_FORBIDDEN",
+                          "error_message": "You do not have access to this endpoint."
+                      }
+                  ]
+                }
+                ```
+            name: X-AUTH-TOKEN
+            in: header
+        X-AUTH-TOKEN-OPERATOR:
+            type: apiKey
+            description: |-
+                Endpoints that require this authentication must send  `X-AUTH-TOKEN` in header. To get such an X-AUTH-TOKEN see `/operator/login` endpoint for further information.
+                ```text
+                X-AUTH-TOKEN: some-valid-x-auth-token
+                ```
+
+                ### Examples of an authentication error
+                The `HTTP status code` in case of an authentication error will be `401 Unauthorized` and the following response will be returned.
+                ```json
+                {
+                  "data": {
+                    "error": "ERR_AUTHENTICATION_FAILURE"
+                  }
+                }
+                ```
+
+                If a user tries to call an endpoint, for which he/she does have the required role, the following response, with `HTTP status code` `401 Unauthorized`, will be returned.
+                ```json
+                {
+                  "data": [
+                      {
+                          "error_code": "ERR_AUTHENTICATION_FORBIDDEN",
+                          "error_message": "You do not have access to this endpoint."
+                      }
+                  ]
+                }
+                ```
+            name: X-AUTH-TOKEN
+            in: header
+        OAuthAccessToken:
+            type: http
+            description: 'The authentication is done by providing a json web token which represents an OAuth Access token provided by the alzura-oauth server.'
+            bearerFormat: JWT
+            scheme: bearer
+tags:
+    -
+        name: articles
+        description: ''
+    -
+        name: orders
+        description: ''
+x-tagGroups:
+    -
+        name: seller
+        tags:
+            - articles
+            - orders

@@ -11,7 +11,7 @@ All URIs are relative to https://api-b2b.alzura.com, except if the operation def
 | [**setTrackingCompanyAndParcelNumberForSeller()**](OrdersApi.md#setTrackingCompanyAndParcelNumberForSeller) | **PATCH** /seller/order/{order}/tracking | Set tracking company and parcel number(s). |
 | [**updatePaymentStatusByOrderNumberForSeller()**](OrdersApi.md#updatePaymentStatusByOrderNumberForSeller) | **PATCH** /seller/order/{order}/paymentstatus | Update the payment status of a given order. |
 | [**uploadDeliveryNotePdfByOrderNumberForSeller()**](OrdersApi.md#uploadDeliveryNotePdfByOrderNumberForSeller) | **PATCH** /seller/order/{order}/deliverynote | Upload a delivery note for an order |
-| [**uploadInvoicePdfByOrderNumberForSeller()**](OrdersApi.md#uploadInvoicePdfByOrderNumberForSeller) | **PATCH** /seller/order/{order}/invoicepdf | Upload an invoice pdf for an order |
+| [**uploadInvoicePdfByOrderNumberForSeller()**](OrdersApi.md#uploadInvoicePdfByOrderNumberForSeller) | **PATCH** /seller/order/{order}/invoicepdf | Upload an invoice pdf with optional XML e-invoice-attachment for an order |
 | [**uploadRefundPdfByOrderNumberForSeller()**](OrdersApi.md#uploadRefundPdfByOrderNumberForSeller) | **PATCH** /seller/order/{order}/refundpdf | Upload a refund pdf for an order |
 
 
@@ -147,7 +147,7 @@ No authorization required
 ## `linkTwoExistingOrdersForSeller()`
 
 ```php
-linkTwoExistingOrdersForSeller($country, $content_type, $order, $request_order_relation)
+linkTwoExistingOrdersForSeller($country, $order, $request_order_relation)
 ```
 
 Link two existing orders.
@@ -177,12 +177,11 @@ $apiInstance = new Tyre24\Seller\Api\OrdersApi(
     $config
 );
 $country = de; // string | Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned.
-$content_type = 'content_type_example'; // string | The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned.
 $order = PAC12345670121; // string
 $request_order_relation = new \Tyre24\Seller\Model\RequestOrderRelation(); // \Tyre24\Seller\Model\RequestOrderRelation
 
 try {
-    $apiInstance->linkTwoExistingOrdersForSeller($country, $content_type, $order, $request_order_relation);
+    $apiInstance->linkTwoExistingOrdersForSeller($country, $order, $request_order_relation);
 } catch (Exception $e) {
     echo 'Exception when calling OrdersApi->linkTwoExistingOrdersForSeller: ', $e->getMessage(), PHP_EOL;
 }
@@ -193,7 +192,6 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **country** | **string**| Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned. | |
-| **content_type** | **string**| The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned. | |
 | **order** | **string**|  | |
 | **request_order_relation** | [**\Tyre24\Seller\Model\RequestOrderRelation**](../Model/RequestOrderRelation.md)|  | [optional] |
 
@@ -421,7 +419,7 @@ void (empty response body)
 ## `uploadDeliveryNotePdfByOrderNumberForSeller()`
 
 ```php
-uploadDeliveryNotePdfByOrderNumberForSeller($country, $content_type, $order, $request_pdf)
+uploadDeliveryNotePdfByOrderNumberForSeller($country, $order, $request_pdf)
 ```
 
 Upload a delivery note for an order
@@ -451,12 +449,11 @@ $apiInstance = new Tyre24\Seller\Api\OrdersApi(
     $config
 );
 $country = de; // string | Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned.
-$content_type = application/json; // string | The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned.
 $order = PAC12345670121; // string
 $request_pdf = new \Tyre24\Seller\Model\RequestPdf(); // \Tyre24\Seller\Model\RequestPdf
 
 try {
-    $apiInstance->uploadDeliveryNotePdfByOrderNumberForSeller($country, $content_type, $order, $request_pdf);
+    $apiInstance->uploadDeliveryNotePdfByOrderNumberForSeller($country, $order, $request_pdf);
 } catch (Exception $e) {
     echo 'Exception when calling OrdersApi->uploadDeliveryNotePdfByOrderNumberForSeller: ', $e->getMessage(), PHP_EOL;
 }
@@ -467,7 +464,6 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **country** | **string**| Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned. | |
-| **content_type** | **string**| The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned. | |
 | **order** | **string**|  | |
 | **request_pdf** | [**\Tyre24\Seller\Model\RequestPdf**](../Model/RequestPdf.md)|  | [optional] |
 
@@ -491,12 +487,12 @@ void (empty response body)
 ## `uploadInvoicePdfByOrderNumberForSeller()`
 
 ```php
-uploadInvoicePdfByOrderNumberForSeller($country, $content_type, $order, $request_pdf)
+uploadInvoicePdfByOrderNumberForSeller($country, $order, $request_pdf)
 ```
 
-Upload an invoice pdf for an order
+Upload an invoice pdf with optional XML e-invoice-attachment for an order
 
-With this endpoint you can upload an invoice pdf for an order, by specifying the base64 encoded pdf in your request body.
+With this endpoint you can upload an invoice pdf with an optional XML e-invoice-attachment for an order, by specifying the base64 encoded pdf in your request body.
 
 ### Example
 
@@ -521,12 +517,11 @@ $apiInstance = new Tyre24\Seller\Api\OrdersApi(
     $config
 );
 $country = de; // string | Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned.
-$content_type = application/json; // string | The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned.
 $order = PAC12345670121; // string
 $request_pdf = new \Tyre24\Seller\Model\RequestPdf(); // \Tyre24\Seller\Model\RequestPdf
 
 try {
-    $apiInstance->uploadInvoicePdfByOrderNumberForSeller($country, $content_type, $order, $request_pdf);
+    $apiInstance->uploadInvoicePdfByOrderNumberForSeller($country, $order, $request_pdf);
 } catch (Exception $e) {
     echo 'Exception when calling OrdersApi->uploadInvoicePdfByOrderNumberForSeller: ', $e->getMessage(), PHP_EOL;
 }
@@ -537,7 +532,6 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **country** | **string**| Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned. | |
-| **content_type** | **string**| The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned. | |
 | **order** | **string**|  | |
 | **request_pdf** | [**\Tyre24\Seller\Model\RequestPdf**](../Model/RequestPdf.md)|  | [optional] |
 
@@ -561,7 +555,7 @@ void (empty response body)
 ## `uploadRefundPdfByOrderNumberForSeller()`
 
 ```php
-uploadRefundPdfByOrderNumberForSeller($country, $content_type, $order, $request_pdf)
+uploadRefundPdfByOrderNumberForSeller($country, $order, $request_pdf)
 ```
 
 Upload a refund pdf for an order
@@ -591,12 +585,11 @@ $apiInstance = new Tyre24\Seller\Api\OrdersApi(
     $config
 );
 $country = de; // string | Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned.
-$content_type = application/json; // string | The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned.
 $order = PAC12345670121; // string
 $request_pdf = new \Tyre24\Seller\Model\RequestPdf(); // \Tyre24\Seller\Model\RequestPdf
 
 try {
-    $apiInstance->uploadRefundPdfByOrderNumberForSeller($country, $content_type, $order, $request_pdf);
+    $apiInstance->uploadRefundPdfByOrderNumberForSeller($country, $order, $request_pdf);
 } catch (Exception $e) {
     echo 'Exception when calling OrdersApi->uploadRefundPdfByOrderNumberForSeller: ', $e->getMessage(), PHP_EOL;
 }
@@ -607,7 +600,6 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **country** | **string**| Country code in ISO 3166-1 alpha-2 (lowercase 2-letter country code). If not specified, the error with code ERR_UNACCESSIBLE_ORDER and status code 400 will be returned. | |
-| **content_type** | **string**| The content type for all json requests. If not specified, errors related to missing required request body parameters will be returned. | |
 | **order** | **string**|  | |
 | **request_pdf** | [**\Tyre24\Seller\Model\RequestPdf**](../Model/RequestPdf.md)|  | [optional] |
 

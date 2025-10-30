@@ -1,7 +1,7 @@
 <?php
 
 /**
- * RequestTrackingInformation
+ * PriceDataRequest
  *
  * PHP version 8.1
  *
@@ -36,14 +36,15 @@ use ReturnTypeWillChange;
 use Tyre24\Seller\ObjectSerializer;
 
 /**
- * RequestTrackingInformation Class Doc Comment
+ * PriceDataRequest Class Doc Comment
  *
+ * @description Data object containing country price data.
  * @package  Tyre24\Seller
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSerializable
+class PriceDataRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +53,7 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
       *
       * @var string
       */
-    protected static string $openAPIModelName = 'RequestTrackingInformation';
+    protected static string $openAPIModelName = 'PriceDataRequest';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -60,8 +61,9 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
       * @var array<string, string>
       */
     protected static array $openAPITypes = [
-        'shipping_company_id' => 'int',
-        'parcel_numbers' => 'string[]'
+        'country_code' => 'string',
+        'price' => 'float',
+        'price_one' => 'float'
     ];
 
     /**
@@ -70,8 +72,9 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
       * @var array<string, string|null>
       */
     protected static array $openAPIFormats = [
-        'shipping_company_id' => null,
-        'parcel_numbers' => null
+        'country_code' => null,
+        'price' => null,
+        'price_one' => null
     ];
 
     /**
@@ -80,8 +83,9 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
       * @var array<string, bool>
       */
     protected static array $openAPINullables = [
-        'shipping_company_id' => false,
-        'parcel_numbers' => false
+        'country_code' => false,
+        'price' => false,
+        'price_one' => false
     ];
 
     /**
@@ -170,8 +174,9 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'shipping_company_id' => 'shipping_company_id',
-        'parcel_numbers' => 'parcel_numbers'
+        'country_code' => 'country_code',
+        'price' => 'price',
+        'price_one' => 'price_one'
     ];
 
     /**
@@ -180,8 +185,9 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $setters = [
-        'shipping_company_id' => 'setShippingCompanyId',
-        'parcel_numbers' => 'setParcelNumbers'
+        'country_code' => 'setCountryCode',
+        'price' => 'setPrice',
+        'price_one' => 'setPriceOne'
     ];
 
     /**
@@ -190,8 +196,9 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $getters = [
-        'shipping_company_id' => 'getShippingCompanyId',
-        'parcel_numbers' => 'getParcelNumbers'
+        'country_code' => 'getCountryCode',
+        'price' => 'getPrice',
+        'price_one' => 'getPriceOne'
     ];
 
     /**
@@ -250,8 +257,9 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('shipping_company_id', $data ?? [], null);
-        $this->setIfExists('parcel_numbers', $data ?? [], null);
+        $this->setIfExists('country_code', $data ?? [], null);
+        $this->setIfExists('price', $data ?? [], null);
+        $this->setIfExists('price_one', $data ?? [], null);
     }
 
     /**
@@ -281,11 +289,8 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
     {
         $invalidProperties = [];
 
-        if ($this->container['shipping_company_id'] === null) {
-            $invalidProperties[] = "'shipping_company_id' can't be null";
-        }
-        if ($this->container['parcel_numbers'] === null) {
-            $invalidProperties[] = "'parcel_numbers' can't be null";
+        if ($this->container['country_code'] === null) {
+            $invalidProperties[] = "'country_code' can't be null";
         }
         return $invalidProperties;
     }
@@ -303,55 +308,82 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
 
 
     /**
-     * Gets shipping_company_id
+     * Gets country_code
      *
-     * @return int
+     * @return string
      */
-    public function getShippingCompanyId(): int
+    public function getCountryCode(): string
     {
-        return $this->container['shipping_company_id'];
+        return $this->container['country_code'];
     }
 
     /**
-     * Sets shipping_company_id
+     * Sets country_code
      *
-     * @param int $shipping_company_id The shipping company id.
+     * @param string $country_code The ISO-2 lower country code, for which the price shall be applied.
      *
      * @return $this
      */
-    public function setShippingCompanyId(int $shipping_company_id): static
+    public function setCountryCode(string $country_code): static
     {
-        if (is_null($shipping_company_id)) {
-            throw new InvalidArgumentException('non-nullable shipping_company_id cannot be null');
+        if (is_null($country_code)) {
+            throw new InvalidArgumentException('non-nullable country_code cannot be null');
         }
-        $this->container['shipping_company_id'] = $shipping_company_id;
+        $this->container['country_code'] = $country_code;
 
         return $this;
     }
 
     /**
-     * Gets parcel_numbers
+     * Gets price
      *
-     * @return string[]
+     * @return float|null
      */
-    public function getParcelNumbers(): array
+    public function getPrice(): ?float
     {
-        return $this->container['parcel_numbers'];
+        return $this->container['price'];
     }
 
     /**
-     * Sets parcel_numbers
+     * Sets price
      *
-     * @param string[] $parcel_numbers The parcel number(s). At least 3 characters long.
+     * @param float|null $price The normal price of the article. The prices must be sent in the same currency as in the CSV import.
      *
      * @return $this
      */
-    public function setParcelNumbers(array $parcel_numbers): static
+    public function setPrice(?float $price): static
     {
-        if (is_null($parcel_numbers)) {
-            throw new InvalidArgumentException('non-nullable parcel_numbers cannot be null');
+        if (is_null($price)) {
+            throw new InvalidArgumentException('non-nullable price cannot be null');
         }
-        $this->container['parcel_numbers'] = $parcel_numbers;
+        $this->container['price'] = $price;
+
+        return $this;
+    }
+
+    /**
+     * Gets price_one
+     *
+     * @return float|null
+     */
+    public function getPriceOne(): ?float
+    {
+        return $this->container['price_one'];
+    }
+
+    /**
+     * Sets price_one
+     *
+     * @param float|null $price_one The price of the article when only one article is ordered. The prices must be sent in the same currency as in the CSV import. This field has only effect for the following types: `PSR`, `PTY`, `R`, `F` and `PUP`
+     *
+     * @return $this
+     */
+    public function setPriceOne(?float $price_one): static
+    {
+        if (is_null($price_one)) {
+            throw new InvalidArgumentException('non-nullable price_one cannot be null');
+        }
+        $this->container['price_one'] = $price_one;
 
         return $this;
     }

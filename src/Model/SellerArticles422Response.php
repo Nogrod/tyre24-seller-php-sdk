@@ -1,7 +1,7 @@
 <?php
 
 /**
- * RequestTrackingInformation
+ * SellerArticles422Response
  *
  * PHP version 8.1
  *
@@ -36,14 +36,14 @@ use ReturnTypeWillChange;
 use Tyre24\Seller\ObjectSerializer;
 
 /**
- * RequestTrackingInformation Class Doc Comment
+ * SellerArticles422Response Class Doc Comment
  *
  * @package  Tyre24\Seller
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSerializable
+class SellerArticles422Response implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
       *
       * @var string
       */
-    protected static string $openAPIModelName = 'RequestTrackingInformation';
+    protected static string $openAPIModelName = 'seller_articles_422_response';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -60,8 +60,7 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
       * @var array<string, string>
       */
     protected static array $openAPITypes = [
-        'shipping_company_id' => 'int',
-        'parcel_numbers' => 'string[]'
+        'data' => '\Tyre24\Seller\Model\IterableFormErrorResponse[]'
     ];
 
     /**
@@ -70,8 +69,7 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
       * @var array<string, string|null>
       */
     protected static array $openAPIFormats = [
-        'shipping_company_id' => null,
-        'parcel_numbers' => null
+        'data' => null
     ];
 
     /**
@@ -80,8 +78,7 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
       * @var array<string, bool>
       */
     protected static array $openAPINullables = [
-        'shipping_company_id' => false,
-        'parcel_numbers' => false
+        'data' => false
     ];
 
     /**
@@ -170,8 +167,7 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'shipping_company_id' => 'shipping_company_id',
-        'parcel_numbers' => 'parcel_numbers'
+        'data' => 'data'
     ];
 
     /**
@@ -180,8 +176,7 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $setters = [
-        'shipping_company_id' => 'setShippingCompanyId',
-        'parcel_numbers' => 'setParcelNumbers'
+        'data' => 'setData'
     ];
 
     /**
@@ -190,8 +185,7 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $getters = [
-        'shipping_company_id' => 'getShippingCompanyId',
-        'parcel_numbers' => 'getParcelNumbers'
+        'data' => 'getData'
     ];
 
     /**
@@ -250,8 +244,7 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('shipping_company_id', $data ?? [], null);
-        $this->setIfExists('parcel_numbers', $data ?? [], null);
+        $this->setIfExists('data', $data ?? [], null);
     }
 
     /**
@@ -281,12 +274,6 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
     {
         $invalidProperties = [];
 
-        if ($this->container['shipping_company_id'] === null) {
-            $invalidProperties[] = "'shipping_company_id' can't be null";
-        }
-        if ($this->container['parcel_numbers'] === null) {
-            $invalidProperties[] = "'parcel_numbers' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -303,55 +290,28 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
 
 
     /**
-     * Gets shipping_company_id
+     * Gets data
      *
-     * @return int
+     * @return \Tyre24\Seller\Model\IterableFormErrorResponse[]|null
      */
-    public function getShippingCompanyId(): int
+    public function getData(): ?array
     {
-        return $this->container['shipping_company_id'];
+        return $this->container['data'];
     }
 
     /**
-     * Sets shipping_company_id
+     * Sets data
      *
-     * @param int $shipping_company_id The shipping company id.
+     * @param \Tyre24\Seller\Model\IterableFormErrorResponse[]|null $data data
      *
      * @return $this
      */
-    public function setShippingCompanyId(int $shipping_company_id): static
+    public function setData(?array $data): static
     {
-        if (is_null($shipping_company_id)) {
-            throw new InvalidArgumentException('non-nullable shipping_company_id cannot be null');
+        if (is_null($data)) {
+            throw new InvalidArgumentException('non-nullable data cannot be null');
         }
-        $this->container['shipping_company_id'] = $shipping_company_id;
-
-        return $this;
-    }
-
-    /**
-     * Gets parcel_numbers
-     *
-     * @return string[]
-     */
-    public function getParcelNumbers(): array
-    {
-        return $this->container['parcel_numbers'];
-    }
-
-    /**
-     * Sets parcel_numbers
-     *
-     * @param string[] $parcel_numbers The parcel number(s). At least 3 characters long.
-     *
-     * @return $this
-     */
-    public function setParcelNumbers(array $parcel_numbers): static
-    {
-        if (is_null($parcel_numbers)) {
-            throw new InvalidArgumentException('non-nullable parcel_numbers cannot be null');
-        }
-        $this->container['parcel_numbers'] = $parcel_numbers;
+        $this->container['data'] = $data;
 
         return $this;
     }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * RequestTrackingInformation
+ * EANArticleRequest
  *
  * PHP version 8.1
  *
@@ -36,14 +36,15 @@ use ReturnTypeWillChange;
 use Tyre24\Seller\ObjectSerializer;
 
 /**
- * RequestTrackingInformation Class Doc Comment
+ * EANArticleRequest Class Doc Comment
  *
+ * @description Request object for PAC, PTO or Alloy articles.
  * @package  Tyre24\Seller
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSerializable
+class EANArticleRequest implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +53,7 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
       *
       * @var string
       */
-    protected static string $openAPIModelName = 'RequestTrackingInformation';
+    protected static string $openAPIModelName = 'EANArticleRequest';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -60,8 +61,14 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
       * @var array<string, string>
       */
     protected static array $openAPITypes = [
-        'shipping_company_id' => 'int',
-        'parcel_numbers' => 'string[]'
+        'type' => 'string',
+        'ean' => 'string',
+        'manufacturer_name' => 'string',
+        'stock' => 'int',
+        'alzura_item_id' => 'string',
+        'customer_article_id' => 'string',
+        'manufacturer_number' => 'string',
+        'prices' => '\Tyre24\Seller\Model\PriceDataRequest[]'
     ];
 
     /**
@@ -70,8 +77,14 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
       * @var array<string, string|null>
       */
     protected static array $openAPIFormats = [
-        'shipping_company_id' => null,
-        'parcel_numbers' => null
+        'type' => null,
+        'ean' => null,
+        'manufacturer_name' => null,
+        'stock' => null,
+        'alzura_item_id' => null,
+        'customer_article_id' => null,
+        'manufacturer_number' => null,
+        'prices' => null
     ];
 
     /**
@@ -80,8 +93,14 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
       * @var array<string, bool>
       */
     protected static array $openAPINullables = [
-        'shipping_company_id' => false,
-        'parcel_numbers' => false
+        'type' => false,
+        'ean' => false,
+        'manufacturer_name' => false,
+        'stock' => false,
+        'alzura_item_id' => false,
+        'customer_article_id' => false,
+        'manufacturer_number' => false,
+        'prices' => false
     ];
 
     /**
@@ -170,8 +189,14 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'shipping_company_id' => 'shipping_company_id',
-        'parcel_numbers' => 'parcel_numbers'
+        'type' => 'type',
+        'ean' => 'ean',
+        'manufacturer_name' => 'manufacturer_name',
+        'stock' => 'stock',
+        'alzura_item_id' => 'alzura_item_id',
+        'customer_article_id' => 'customer_article_id',
+        'manufacturer_number' => 'manufacturer_number',
+        'prices' => 'prices'
     ];
 
     /**
@@ -180,8 +205,14 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $setters = [
-        'shipping_company_id' => 'setShippingCompanyId',
-        'parcel_numbers' => 'setParcelNumbers'
+        'type' => 'setType',
+        'ean' => 'setEan',
+        'manufacturer_name' => 'setManufacturerName',
+        'stock' => 'setStock',
+        'alzura_item_id' => 'setAlzuraItemId',
+        'customer_article_id' => 'setCustomerArticleId',
+        'manufacturer_number' => 'setManufacturerNumber',
+        'prices' => 'setPrices'
     ];
 
     /**
@@ -190,8 +221,14 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $getters = [
-        'shipping_company_id' => 'getShippingCompanyId',
-        'parcel_numbers' => 'getParcelNumbers'
+        'type' => 'getType',
+        'ean' => 'getEan',
+        'manufacturer_name' => 'getManufacturerName',
+        'stock' => 'getStock',
+        'alzura_item_id' => 'getAlzuraItemId',
+        'customer_article_id' => 'getCustomerArticleId',
+        'manufacturer_number' => 'getManufacturerNumber',
+        'prices' => 'getPrices'
     ];
 
     /**
@@ -250,8 +287,14 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('shipping_company_id', $data ?? [], null);
-        $this->setIfExists('parcel_numbers', $data ?? [], null);
+        $this->setIfExists('type', $data ?? [], null);
+        $this->setIfExists('ean', $data ?? [], null);
+        $this->setIfExists('manufacturer_name', $data ?? [], null);
+        $this->setIfExists('stock', $data ?? [], null);
+        $this->setIfExists('alzura_item_id', $data ?? [], null);
+        $this->setIfExists('customer_article_id', $data ?? [], null);
+        $this->setIfExists('manufacturer_number', $data ?? [], null);
+        $this->setIfExists('prices', $data ?? [], null);
     }
 
     /**
@@ -281,11 +324,11 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
     {
         $invalidProperties = [];
 
-        if ($this->container['shipping_company_id'] === null) {
-            $invalidProperties[] = "'shipping_company_id' can't be null";
+        if ($this->container['type'] === null) {
+            $invalidProperties[] = "'type' can't be null";
         }
-        if ($this->container['parcel_numbers'] === null) {
-            $invalidProperties[] = "'parcel_numbers' can't be null";
+        if ($this->container['stock'] === null) {
+            $invalidProperties[] = "'stock' can't be null";
         }
         return $invalidProperties;
     }
@@ -303,55 +346,217 @@ class RequestTrackingInformation implements ModelInterface, ArrayAccess, JsonSer
 
 
     /**
-     * Gets shipping_company_id
+     * Gets type
      *
-     * @return int
+     * @return string
      */
-    public function getShippingCompanyId(): int
+    public function getType(): string
     {
-        return $this->container['shipping_company_id'];
+        return $this->container['type'];
     }
 
     /**
-     * Sets shipping_company_id
+     * Sets type
      *
-     * @param int $shipping_company_id The shipping company id.
+     * @param string $type The product type, so `PAC`, `PTO`, `PSR`, `PTY` or `A` for this type.
      *
      * @return $this
      */
-    public function setShippingCompanyId(int $shipping_company_id): static
+    public function setType(string $type): static
     {
-        if (is_null($shipping_company_id)) {
-            throw new InvalidArgumentException('non-nullable shipping_company_id cannot be null');
+        if (is_null($type)) {
+            throw new InvalidArgumentException('non-nullable type cannot be null');
         }
-        $this->container['shipping_company_id'] = $shipping_company_id;
+        $this->container['type'] = $type;
 
         return $this;
     }
 
     /**
-     * Gets parcel_numbers
+     * Gets ean
      *
-     * @return string[]
+     * @return string|null
      */
-    public function getParcelNumbers(): array
+    public function getEan(): ?string
     {
-        return $this->container['parcel_numbers'];
+        return $this->container['ean'];
     }
 
     /**
-     * Sets parcel_numbers
+     * Sets ean
      *
-     * @param string[] $parcel_numbers The parcel number(s). At least 3 characters long.
+     * @param string|null $ean The European Article Number of the article.
      *
      * @return $this
      */
-    public function setParcelNumbers(array $parcel_numbers): static
+    public function setEan(?string $ean): static
     {
-        if (is_null($parcel_numbers)) {
-            throw new InvalidArgumentException('non-nullable parcel_numbers cannot be null');
+        if (is_null($ean)) {
+            throw new InvalidArgumentException('non-nullable ean cannot be null');
         }
-        $this->container['parcel_numbers'] = $parcel_numbers;
+        $this->container['ean'] = $ean;
+
+        return $this;
+    }
+
+    /**
+     * Gets manufacturer_name
+     *
+     * @return string|null
+     */
+    public function getManufacturerName(): ?string
+    {
+        return $this->container['manufacturer_name'];
+    }
+
+    /**
+     * Sets manufacturer_name
+     *
+     * @param string|null $manufacturer_name The name of the manufacturer. Must be used together with `manufacturer_number` to have an effect.
+     *
+     * @return $this
+     */
+    public function setManufacturerName(?string $manufacturer_name): static
+    {
+        if (is_null($manufacturer_name)) {
+            throw new InvalidArgumentException('non-nullable manufacturer_name cannot be null');
+        }
+        $this->container['manufacturer_name'] = $manufacturer_name;
+
+        return $this;
+    }
+
+    /**
+     * Gets stock
+     *
+     * @return int
+     */
+    public function getStock(): int
+    {
+        return $this->container['stock'];
+    }
+
+    /**
+     * Sets stock
+     *
+     * @param int $stock The amount of articles left in the stock.
+     *
+     * @return $this
+     */
+    public function setStock(int $stock): static
+    {
+        if (is_null($stock)) {
+            throw new InvalidArgumentException('non-nullable stock cannot be null');
+        }
+        $this->container['stock'] = $stock;
+
+        return $this;
+    }
+
+    /**
+     * Gets alzura_item_id
+     *
+     * @return string|null
+     */
+    public function getAlzuraItemId(): ?string
+    {
+        return $this->container['alzura_item_id'];
+    }
+
+    /**
+     * Sets alzura_item_id
+     *
+     * @param string|null $alzura_item_id The unique id of the article.
+     *
+     * @return $this
+     */
+    public function setAlzuraItemId(?string $alzura_item_id): static
+    {
+        if (is_null($alzura_item_id)) {
+            throw new InvalidArgumentException('non-nullable alzura_item_id cannot be null');
+        }
+        $this->container['alzura_item_id'] = $alzura_item_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets customer_article_id
+     *
+     * @return string|null
+     */
+    public function getCustomerArticleId(): ?string
+    {
+        return $this->container['customer_article_id'];
+    }
+
+    /**
+     * Sets customer_article_id
+     *
+     * @param string|null $customer_article_id A internal number given by the customer, to identify an article using a different id than our database.
+     *
+     * @return $this
+     */
+    public function setCustomerArticleId(?string $customer_article_id): static
+    {
+        if (is_null($customer_article_id)) {
+            throw new InvalidArgumentException('non-nullable customer_article_id cannot be null');
+        }
+        $this->container['customer_article_id'] = $customer_article_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets manufacturer_number
+     *
+     * @return string|null
+     */
+    public function getManufacturerNumber(): ?string
+    {
+        return $this->container['manufacturer_number'];
+    }
+
+    /**
+     * Sets manufacturer_number
+     *
+     * @param string|null $manufacturer_number The number of the manufacturer.
+     *
+     * @return $this
+     */
+    public function setManufacturerNumber(?string $manufacturer_number): static
+    {
+        if (is_null($manufacturer_number)) {
+            throw new InvalidArgumentException('non-nullable manufacturer_number cannot be null');
+        }
+        $this->container['manufacturer_number'] = $manufacturer_number;
+
+        return $this;
+    }
+
+    /**
+     * Gets prices
+     *
+     * @return \Tyre24\Seller\Model\PriceDataRequest[]|null
+     */
+    public function getPrices(): ?array
+    {
+        return $this->container['prices'];
+    }
+
+    /**
+     * Sets prices
+     *
+     * @param \Tyre24\Seller\Model\PriceDataRequest[]|null $prices List of prices for different countries. If activated, the price validation will run for all prices. If the difference of `price_one` is to great in comparison with the normal price it will be capped. If the normal price is <= 250€ (or 1000zł) the cap is 5€. For prices above that border the difference is 2%. At least one price must be given.
+     *
+     * @return $this
+     */
+    public function setPrices(?array $prices): static
+    {
+        if (is_null($prices)) {
+            throw new InvalidArgumentException('non-nullable prices cannot be null');
+        }
+        $this->container['prices'] = $prices;
 
         return $this;
     }
