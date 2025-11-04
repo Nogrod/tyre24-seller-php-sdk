@@ -1054,7 +1054,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\ModelStatusUpdate $model_status_update = null,
         string $contentType = self::contentTypes['setOrderStatusByOrderNumberForSeller'][0]
-    ): \Tyre24\Seller\Model\SetOrderStatusByOrderNumberForSeller400Response|\Tyre24\Seller\Model\SellerArticles401Response {
+    ): null|\Tyre24\Seller\Model\SetOrderStatusByOrderNumberForSeller400Response|\Tyre24\Seller\Model\SellerArticles401Response {
         list($response) = $this->setOrderStatusByOrderNumberForSellerWithHttpInfo($country, $order, $model_status_update, $contentType);
         return $response;
     }
@@ -1346,7 +1346,7 @@ class OrdersApi
         string $order,
         ?\Tyre24\Seller\Model\RequestTrackingInformation $request_tracking_information = null,
         string $contentType = self::contentTypes['setTrackingCompanyAndParcelNumberForSeller'][0]
-    ): \Tyre24\Seller\Model\SetOrderStatusByOrderNumberForSeller400Response|\Tyre24\Seller\Model\SellerArticles401Response {
+    ): null|\Tyre24\Seller\Model\SetOrderStatusByOrderNumberForSeller400Response|\Tyre24\Seller\Model\SellerArticles401Response {
         list($response) = $this->setTrackingCompanyAndParcelNumberForSellerWithHttpInfo($country, $order, $request_tracking_information, $contentType);
         return $response;
     }
