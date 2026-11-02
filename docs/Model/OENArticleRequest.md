@@ -1,4 +1,4 @@
-# # OENArticleRequest
+# OENArticleRequest
 
 ## Properties
 

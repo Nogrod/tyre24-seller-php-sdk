@@ -1,4 +1,4 @@
-# # AccessControlErrorResponse
+# AccessControlErrorResponse
 
 ## Properties
 

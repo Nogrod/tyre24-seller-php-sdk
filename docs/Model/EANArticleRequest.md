@@ -1,4 +1,4 @@
-# # EANArticleRequest
+# EANArticleRequest
 
 ## Properties
 

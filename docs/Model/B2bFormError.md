@@ -1,4 +1,4 @@
-# # B2bFormError
+# B2bFormError
 
 ## Properties
 

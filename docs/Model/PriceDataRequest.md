@@ -1,4 +1,4 @@
-# # PriceDataRequest
+# PriceDataRequest
 
 ## Properties
 

@@ -1,4 +1,4 @@
-# # SellerArticles422Response
+# SellerArticles422Response
 
 ## Properties
 

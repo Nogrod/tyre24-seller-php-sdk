@@ -1,4 +1,4 @@
-# # ArticlesRequest
+# ArticlesRequest
 
 ## Properties
 

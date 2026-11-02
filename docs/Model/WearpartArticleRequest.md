@@ -1,4 +1,4 @@
-# # WearpartArticleRequest
+# WearpartArticleRequest
 
 ## Properties
 

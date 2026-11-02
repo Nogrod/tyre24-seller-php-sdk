@@ -1,4 +1,4 @@
-# # UPUIDArticleRequest
+# UPUIDArticleRequest
 
 ## Properties
 

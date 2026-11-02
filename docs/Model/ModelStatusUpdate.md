@@ -1,4 +1,4 @@
-# # ModelStatusUpdate
+# ModelStatusUpdate
 
 ## Properties
 

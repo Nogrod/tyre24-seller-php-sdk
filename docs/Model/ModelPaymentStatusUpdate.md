@@ -1,4 +1,4 @@
-# # ModelPaymentStatusUpdate
+# ModelPaymentStatusUpdate
 
 ## Properties
 

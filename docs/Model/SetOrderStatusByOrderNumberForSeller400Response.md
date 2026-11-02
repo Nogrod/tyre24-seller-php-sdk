@@ -1,4 +1,4 @@
-# # SetOrderStatusByOrderNumberForSeller400Response
+# SetOrderStatusByOrderNumberForSeller400Response
 
 ## Properties
 
